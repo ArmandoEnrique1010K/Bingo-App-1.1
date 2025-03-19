@@ -325,6 +325,7 @@ export const levels: Level[] = [
             }
         ],
     },
+    // TODO: MODIFICAR ESTE NIVEL
     {
         // Nivel con 2 objetivos en el tablero
         level: 10,
@@ -705,6 +706,7 @@ export const levels: Level[] = [
         ]
     },
     {
+        // TODO: MODIFICAR ESTE NIVEL
         level: 18,
         targetQuantity: 5,
         targetText: "Una cruz de 9 números y un aspa de 5 números que empiece del centro",

@@ -1,21 +1,30 @@
-import { Board } from "../../types"
-import BotColumnNumbers from "./BotColumnNumbers"
+import { Board } from "../../types";
+import BotColumnNumbers from "./BotColumnNumbers";
 
 type BotBoardNumbersProps = {
-    board: Board,
-    handleSelectedPosition: (idBoard: number, position: number) => boolean,
-    idBoard: number
-}
+  board: Board;
+  handleSelectedPosition: (idBoard: number, position: number) => boolean;
+  idBoard: number;
+};
 
-
-export default function BotBoardNumbers({ board, handleSelectedPosition, idBoard }: BotBoardNumbersProps) {
-    return (
-        <div className="grid grid-cols-5">
-            <BotColumnNumbers idBoard={idBoard} board={board} handleSelectedPosition={handleSelectedPosition} min={1} max={5} />
-            <BotColumnNumbers idBoard={idBoard} board={board} handleSelectedPosition={handleSelectedPosition} min={6} max={10} />
-            <BotColumnNumbers idBoard={idBoard} board={board} handleSelectedPosition={handleSelectedPosition} min={11} max={15} />
-            <BotColumnNumbers idBoard={idBoard} board={board} handleSelectedPosition={handleSelectedPosition} min={16} max={20} />
-            <BotColumnNumbers idBoard={idBoard} board={board} handleSelectedPosition={handleSelectedPosition} min={21} max={25} />
-        </div>
-    )
+export default function BotBoardNumbers({
+  board,
+  handleSelectedPosition,
+  idBoard,
+}: BotBoardNumbersProps) {
+  return (
+    <div className="grid grid-cols-5">
+      {/* Conviene usar un arreglo para generar dinamicamente las columnas del tablero */}
+      {Array.from({ length: 5 }).map((_, index) => (
+        <BotColumnNumbers
+          key={index}
+          board={board}
+          handleSelectedPosition={handleSelectedPosition}
+          idBoard={idBoard}
+          min={index * 5 + 1}
+          max={(index + 1) * 5}
+        />
+      ))}
+    </div>
+  );
 }

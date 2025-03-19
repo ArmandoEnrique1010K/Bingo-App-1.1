@@ -1,10 +1,10 @@
-import Router from "./routes/Router"
+import BingoRouter from "./routes/BingoRouter"
 
 function App() {
 
   return (
     <>
-      <Router />
+      <BingoRouter />
     </>
   )
 }

@@ -19,7 +19,7 @@ export default function BotSquareNumber({ handleSelectedPosition, value, idBoard
                 }
             >
                 {/* El bot no muestra los numeros de su tablero */}
-                {value.position === 13 ? 'F' : "" /*value.number*/}
+                {value.position === 13 ? 'F' : "" /* value.number */}
             </div>
         </>
     )
