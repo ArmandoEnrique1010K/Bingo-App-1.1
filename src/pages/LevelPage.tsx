@@ -462,7 +462,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
           // TODO: EXPLICAR ESTO
           <div
             className={`
-grid gap-3  mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-[10%] ${viewPlayerBoard === true ? "" : "hidden"
+grid gap-3  mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-[10%] ${viewPlayerBoard === false ? "sm:hidden" : "grid"
               }`}
           >
             {

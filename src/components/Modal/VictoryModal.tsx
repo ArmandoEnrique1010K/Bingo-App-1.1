@@ -34,7 +34,7 @@ export default function VictoryModal({
   function check() {
     if (handleCheckWinnerPattern() === true) {
       // Abre la ventana modal
-      setIsOpen(true);
+      open()
     }
   }
 

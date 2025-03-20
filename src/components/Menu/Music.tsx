@@ -61,17 +61,16 @@ export default function Music() {
       {/* Este botón se mostrara al renderizar este componente */}
       {/* Si isPlaying es true, detiene la canción, de lo contrario lo reproduce */}
       <button
-        className={`sm:py-4 py-2 px-3 ${
-          isPlaying
+        className={`sm:py-4 py-2 px-3 ${isPlaying
             ? "text-cyan-500 hover:text-cyan-600 active:text-cyan-700"
             : "text-cyan-800 hover:text-cyan-600 active:text-cyan-700"
-        }`}
+          }`}
         onClick={isPlaying ? stopMusic : startMusic}
       >
         {/* Aplica un estilo dependiendo de la reproducción del audio */}
         <MusicalNoteIcon
           className={`sm:w-7 w-5`}
-          // aria-hidden="true"
+        // aria-hidden="true"
         />
       </button>
     </>

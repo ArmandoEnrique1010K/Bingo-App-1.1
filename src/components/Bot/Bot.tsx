@@ -320,13 +320,7 @@ export default function Bots({
     }
   }, [winner]);
 
-  const getQuantityBoards = () => {
-    console.log(boards);
-  };
 
-  useEffect(() => {
-    getQuantityBoards();
-  }, []);
 
   return (
     // DE ALGUNA FORMA SE TIENE QUE OBTENER EL ID DE LOS BOTS
