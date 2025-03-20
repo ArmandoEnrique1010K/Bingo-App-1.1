@@ -1,16 +1,6 @@
-// Posiciones de los numeros en el tablero
-/*
-1   6   11  16  21
-2   7   12  17  22
-3   8   13  18  23
-4   9   14  19  24
-5   10  15  20  25
-*/
-
-
 import { Board } from "../types";
 
-
+// Tablero del juego, contiene las posiciones y los números
 export const board: Board = [
     {
         position: 1,
@@ -113,3 +103,12 @@ export const board: Board = [
         number: 0
     }
 ]
+
+// Posiciones de los numeros en el tablero
+/*
+1   6   11  16  21
+2   7   12  17  22
+3   8   13  18  23
+4   9   14  19  24
+5   10  15  20  25
+*/

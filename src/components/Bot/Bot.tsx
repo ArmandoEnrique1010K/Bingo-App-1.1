@@ -67,7 +67,7 @@ export default function Bots({
       id: index + 1, // ID del tablero, evita el valor 0
       board: generateBoard(), // Genera un tablero aleatorio
     }));
-  }, [boards]);
+  }, [defeat]);
 
   // READY??? : DE ALGUNA MANERA, SI EL BOT HA GANADO, DEBE DEJAR DE SEGUIR EVALUANDO
 
@@ -166,11 +166,11 @@ export default function Bots({
       prevState.map((board) =>
         board.idBoard === idBoard
           ? {
-              ...board,
-              numbers: handleVerifyNumber(idBoard, number)
-                ? [...board.numbers, number]
-                : board.numbers,
-            }
+            ...board,
+            numbers: handleVerifyNumber(idBoard, number)
+              ? [...board.numbers, number]
+              : board.numbers,
+          }
           : board
       )
     );
@@ -179,11 +179,11 @@ export default function Bots({
       prevState.map((board) =>
         board.idBoard === idBoard
           ? {
-              ...board,
-              positions: handleVerifyNumber(idBoard, number)
-                ? [...board.positions, position]
-                : board.positions,
-            }
+            ...board,
+            positions: handleVerifyNumber(idBoard, number)
+              ? [...board.positions, position]
+              : board.positions,
+          }
           : board
       )
     );
@@ -210,6 +210,7 @@ export default function Bots({
   const handleCheckWinnerPatternBot = () => {
     if (defeat) return; // Si el juego terminó, no evalúa
 
+    if (victory) return;
     // Itera por cada tablero del bot
     for (const board of botSelectedPositions) {
       // Si tiene el patrón ganador en
@@ -227,14 +228,30 @@ export default function Bots({
 
         const timeoutId = setTimeout(() => {
           if (victory) {
-            // console.log("El jugador ganó antes de que el bot terminara");
+            handleCleanTargets();
             handleSetDefeat(false);
+            handleSetVictory(true);
+            console.log('EJECUTANDO LA FUNCIÓN LUEGO DE 5 SEGUNDOS SI HUBO VICTORIA')
+            return
           } else {
             handleSetDefeat(true);
-            handleSetVictory(false);
-            handleCleanTargets(); // Limpia los números objetivos
-            // console.log("SE ACABO EL JUEGO: el bot ganó");
+            handleSetVictory(false)
+            console.log('EJECUTANDO LA FUNCIÓN LUEGO DE 5 SEGUNDOS SI HUBO DERROTA')
+            return
           }
+
+
+          // if (victory) {
+          //   console.log('EL JUGADOR HA GANADO, EL BOT DEBE DESACTIVARSE')
+          //   // console.log("El jugador ganó antes de que el bot terminara");
+          //   handleSetDefeat(false);
+          // } else {
+          //   console.log('EL BOT HA GANADO, DEBES VOLVER A INTENTAR')
+          //   handleSetDefeat(true);
+          //   handleSetVictory(false);
+          //   handleCleanTargets(); // Limpia los números objetivos
+          //   // console.log("SE ACABO EL JUEGO: el bot ganó");
+          // }
         }, 5000);
 
         // Limpia los temporizadores
@@ -296,13 +313,13 @@ export default function Bots({
     // DE ALGUNA FORMA SE TIENE QUE OBTENER EL ID DE LOS BOTS
     // SE NECESITA SABER EL NUMERO DE TABLEROS DEL SIGUIENTE BOT PARA APLICAR EL ESTILO RESPONSIVE
     <div
-      className={`flex flex-col items-center justify-center bg-gray-700  p-2 rounded-lg shadow-md 
+      className={`
+        flex flex-col items-center bg-gray-700  p-2 rounded-lg shadow-md 
         
         ${boards >= 2 ? "col-span-2" : ""}
-        ${
-          boards < 2 && (nextBoards !== 0 || nextBoards >= 2)
-            ? "col-span-2"
-            : ""
+        ${boards < 2 && (nextBoards !== 0 || nextBoards >= 2)
+          ? "col-span-2"
+          : ""
         }
         `}
     >

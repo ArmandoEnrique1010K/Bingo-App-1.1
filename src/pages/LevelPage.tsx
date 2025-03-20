@@ -66,15 +66,17 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
 
   // Genera los tableros de acuerdo a la cantidad asignada en la propiedad boards del nivel actual
   const newBoards = useMemo(() => {
-    // Array sirve para crear un nuevo arreglo y from especifica la cantidad de elementos del arreglo
-    // El metodo map, el primer argumento "_", representa cada elemento, el segundo "index" es el orden
-    // del elemento
-    return Array.from({ length: currentLevel.boards }).map((_, index) => ({
-      // Se evita el id igual a 0
-      id: index + 1,
-      board: generateBoard(),
-    }));
-  }, [currentLevel.boards]);
+    if (defeat === false) {
+      console.log('GENERANDO NUEVOS TABLEROS');
+      return Array.from({ length: currentLevel.boards }).map((_, index) => ({
+        id: index + 1,
+        board: generateBoard(),
+      }));
+    } else {
+      return []
+    }
+
+  }, [currentLevel.level, defeat]);
 
   // Función para establecer los valores iniciales al empezar o reiniciar el nivel
   const resetLevel = () => {
@@ -144,7 +146,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   useEffect(() => {
     console.log(
       "Numeros que ya fuerón utilizados previamente (excepto en este turno): " +
-        excludedTargetNumbers
+      excludedTargetNumbers
     );
   }, [excludedTargetNumbers]);
 
@@ -322,7 +324,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   return (
     <>
       <div className="text-white m-auto">
-        <div className="container mx-auto py-4 flex sm:flex-row flex-col items-start sm:gap-6 gap-4 justify-center">
+        <div className="container py-4 flex sm:flex-row flex-col items-start sm:gap-6 gap-4 justify-center mx-auto">
           <div className="flex flex-row sm:flex-col sm:w-96 w-full justify-center sm:m-0 sm:gap-0 gap-3 mx-auto">
             <div className=" flex flex-col min-w-20 sm:ml-0 ml-2 sm:w-auto w-full">
               <div className="mb-4 text-center bg-gray-700 rounded-xl p-1">
@@ -385,11 +387,10 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
                                                 
                                                 px-4 sm:py-3 py-2 font-semibold rounded-lg shadow-md 
             transition duration-300  w-full  shadow-black 
-            ${
-              isAtFirstBoard
-                ? "bg-gray-500 text-white cursor-not-allowed"
-                : "bg-cyan-500 hover:bg-cyan-600 text-white"
-            }`}
+            ${isAtFirstBoard
+                        ? "bg-gray-500 text-white cursor-not-allowed"
+                        : "bg-cyan-500 hover:bg-cyan-600 text-white"
+                      }`}
                     onClick={() => handleChangeBoard("prev")}
                     disabled={isAtFirstBoard}
                   >
@@ -403,11 +404,10 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
                     className={`px-4 
                                              sm:py-3 py-2 font-semibold rounded-lg shadow-md 
             transition duration-300 w-full  sm:text-base text-sm shadow-black 
-            ${
-              isAtLastBoard
-                ? "bg-gray-500 text-white cursor-not-allowed"
-                : "bg-cyan-500 hover:bg-cyan-600 text-white"
-            }`}
+            ${isAtLastBoard
+                        ? "bg-gray-500 text-white cursor-not-allowed"
+                        : "bg-cyan-500 hover:bg-cyan-600 text-white"
+                      }`}
                     onClick={() => handleChangeBoard("next")}
                     disabled={isAtLastBoard}
                   >
@@ -454,18 +454,11 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
             }`}
              */}
         {
-          //
+          // TODO: EXPLICAR ESTO
           <div
             className={`
-              sm:flex 
-              sm:flex-row grid  
-              grid-cols-2 
-              items-center 
-              bg-red-500 
-              justify-center  
-               mt-0 mx-2 gap-3 mb-4 ${
-                 viewPlayerBoard === false ? "" : "hidden"
-               }`}
+grid gap-3  mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-[10%] ${viewPlayerBoard === true ? "" : "hidden"
+              }`}
           >
             {
               // SECCION PARA AGRUPAR TODOS LOS BOTS
@@ -492,6 +485,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
               ))
             }
           </div>
+
         }
 
         {
