@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { levels } from "../data/levels";
 import { generateBoard } from "../utils/generateBoard";
-import { BoardID, Pattern, SelectedNumbers, SelectedPositions, Winner } from "../types";
+import {
+  BoardID,
+  Pattern,
+  SelectedNumbers,
+  SelectedPositions,
+  Winner,
+} from "../types";
 import TargetsNumbers from "../components/Target/TargetNumbers";
 import BoardNumbers from "../components/Player/BoardNumbers";
 import TargetPattern from "../components/Target/TargetPattern";
@@ -44,7 +50,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   // const [victory, setVictory] = useState(false);
 
   // Ganador
-  const [winner, setWinner] = useState<Winner>('none');
+  const [winner, setWinner] = useState<Winner>("none");
 
   // Fin del juego si el bot gana
   // const [defeat, setDefeat] = useState(false);
@@ -69,16 +75,15 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
 
   // Genera los tableros de acuerdo a la cantidad asignada en la propiedad boards del nivel actual
   const newBoards = useMemo(() => {
-    if (winner === 'none') {
-      console.log('GENERANDO NUEVOS TABLEROS');
+    if (winner === "none") {
+      console.log("GENERANDO NUEVOS TABLEROS");
       return Array.from({ length: currentLevel.boards }).map((_, index) => ({
         id: index + 1,
         board: generateBoard(),
       }));
     } else {
-      return []
+      return [];
     }
-
   }, [currentLevel.level, winner]);
 
   // Función para establecer los valores iniciales al empezar o reiniciar el nivel
@@ -106,7 +111,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
     // Ronda 0
     setRound(0);
     // Aun no hay victoria ni derrota
-    setWinner('none')
+    setWinner("none");
     // setVictory(false);
     // setDefeat(false);
     setExcludedTargetNumbers([]);
@@ -120,7 +125,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   // Cuando el jugador pierde, se tiene que volver a reiniciar el nivel
   // Nota: El state de defeat debe volver a ser false
   useEffect(() => {
-    if (winner === 'none') {
+    if (winner === "none") {
       resetLevel();
     }
   }, [winner]);
@@ -150,7 +155,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   useEffect(() => {
     console.log(
       "Numeros que ya fuerón utilizados previamente (excepto en este turno): " +
-      excludedTargetNumbers
+        excludedTargetNumbers
     );
   }, [excludedTargetNumbers]);
 
@@ -240,7 +245,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
         )
       ) {
         // Se establece victory en true
-        setWinner('player')
+        setWinner("player");
         // setVictory(true);
         // setDefeat(false);
 
@@ -392,10 +397,11 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
                                                 
                                                 px-4 sm:py-3 py-2 font-semibold rounded-lg shadow-md 
             transition duration-300  w-full  shadow-black 
-            ${isAtFirstBoard
-                        ? "bg-gray-500 text-white cursor-not-allowed"
-                        : "bg-cyan-500 hover:bg-cyan-600 text-white"
-                      }`}
+            ${
+              isAtFirstBoard
+                ? "bg-gray-500 text-white cursor-not-allowed"
+                : "bg-cyan-500 hover:bg-cyan-600 text-white"
+            }`}
                     onClick={() => handleChangeBoard("prev")}
                     disabled={isAtFirstBoard}
                   >
@@ -409,10 +415,11 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
                     className={`px-4 
                                              sm:py-3 py-2 font-semibold rounded-lg shadow-md 
             transition duration-300 w-full  sm:text-base text-sm shadow-black 
-            ${isAtLastBoard
-                        ? "bg-gray-500 text-white cursor-not-allowed"
-                        : "bg-cyan-500 hover:bg-cyan-600 text-white"
-                      }`}
+            ${
+              isAtLastBoard
+                ? "bg-gray-500 text-white cursor-not-allowed"
+                : "bg-cyan-500 hover:bg-cyan-600 text-white"
+            }`}
                     onClick={() => handleChangeBoard("next")}
                     disabled={isAtLastBoard}
                   >
@@ -462,8 +469,10 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
           // TODO: EXPLICAR ESTO
           <div
             className={`
-grid gap-3  mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-[10%] ${viewPlayerBoard === false ? "sm:hidden" : "grid"
-              }`}
+              grid gap-3 mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-auto container
+              ${viewPlayerBoard === false ? "grid" : "hidden"} 
+              sm:grid
+            `}
           >
             {
               // SECCION PARA AGRUPAR TODOS LOS BOTS
@@ -492,12 +501,11 @@ grid gap-3  mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-[10%] ${
               ))
             }
           </div>
-
         }
 
         {
           // Si el jugador ha perdido
-          winner === 'bot' && (
+          winner === "bot" && (
             // Muestra la ventana modal que se muestra automaticamente
             <DefeatModal
               level={currentLevel.level}

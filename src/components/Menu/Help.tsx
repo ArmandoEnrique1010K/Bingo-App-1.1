@@ -35,66 +35,76 @@ export default function Help() {
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel
               transition
-              className="w-full max-w-4xl rounded-lg bg-white p-8 shadow-xl transform transition-all duration-300 ease-in-out 
-                            
-                            data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+              className="w-full max-w-4xl rounded-lg bg-white p-8 shadow-xl transform transition-all duration-300 ease-in-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
             >
               <DialogTitle
                 as="h2"
-                className="text-4xl font-semibold text-center text-gray-900 mb-10"
+                className="text-4xl font-semibold text-center  mb-10"
               >
                 Instrucciones
               </DialogTitle>
-              <div className="space-y-3 text-lg text-gray-700">
+              <div className="text-lg space-y-4">
+                <h3 className="text-2xl font-bold">¡Bienvenido a BingoApp!</h3>
                 <p>
-                  Bienvenido a BingoApp. Tu objetivo es derrotar a los bots en
-                  un juego de Bingo, se el primero en formar el patrón ganador.
+                  Tu objetivo es derrotar a los bots en un juego de Bingo. Sé el
+                  primero en completar el patrón ganador antes que ellos.
                 </p>
+                <h3 className="text-2xl pt-2 font-bold">Menú principal</h3>
                 <p>
-                  En el menú principal, encontrarás varios botones para
-                  interactuar con la aplicación
+                  En el menú principal encontrarás varias opciones para
+                  interactuar con el juego:
                 </p>
-                <p>
-                  <span className="font-bold">Niveles: </span>
-                  Aquí podrás acceder a los diferentes niveles del juego o la
-                  aplicación. Podrás desbloquear nuevos niveles a medida que
-                  avanzas.
-                </p>
-
-                <p>
-                  <span className="font-bold">Música: </span>Puedes activar o
-                  desactivar la música de fondo.
-                </p>
-
-                <p>
-                  <span className="font-bold">Creditos: </span>Observa los
-                  créditos de la aplicación.
-                </p>
-                <h3 className="text-2xl pt-4 font-bold">Iniciar partida</h3>
-                <p>
-                  Al iniciar una partida tu deberas hacer clic en el botón de
-                  "Iniciar partida", se generaran unos numeros aleatorios, los
-                  cuales tu debes buscarlos en el tablero y marcarlos, al mismo
-                  tiempo los bots tambien iran marcando los números.
-                </p>
-                <p>Existen 3 tipos de bots:</p>
-                <ul>
-                  <li className="list-disc list-inside">Slow bot</li>
-                  <li className="list-disc list-inside">Middle Bot</li>
-                  <li className="list-disc list-inside">Fast Bot</li>
+                <ul className="list-disc list-inside pl-5 space-y-2">
+                  <li>
+                    <span className="font-semibold">Niveles: </span>Accede a los
+                    distintos niveles del juego. A medida que avances, podrás
+                    desbloquear nuevos desafíos.
+                  </li>
+                  <li>
+                    <span className="font-semibold">Música: </span> Activa o
+                    desactiva la música de fondo.
+                  </li>
+                  <li>
+                    <span className="font-semibold">Créditos: </span>Consulta la
+                    información sobre los creadores del juego.
+                  </li>
                 </ul>
-
+                <h3 className="text-2xl pt-2 font-bold ">Cómo jugar</h3>
+                <ul className="list-decimal list-inside pl-5 space-y-2">
+                  <li>
+                    <span className="font-semibold">Iniciar partida: </span>
+                    Presiona el botón "Iniciar partida" para comenzar el juego.
+                  </li>
+                  <li>
+                    <span className="font-semibold">Números aleatorios: </span>
+                    Se generarán números al azar, y deberás buscarlos en tu
+                    tablero para marcarlos.
+                  </li>
+                  <li>
+                    <span className="font-semibold">
+                      Competencia con los bots :
+                    </span>
+                    Los bots también marcarán números en sus tableros al mismo
+                    tiempo.
+                  </li>
+                  <li>
+                    <span className="font-semibold">Tableros múltiples: </span>
+                    Algunos niveles pueden requerir que juegues con dos tableros
+                    en simultáneo.
+                  </li>
+                  <li>
+                    <span className="font-semibold">Fin del juego: </span> La
+                    partida termina cuando uno de los jugadores (tú o un bot)
+                    completa el patrón ganador en al menos un tablero.
+                  </li>
+                </ul>
+                <h3 className="text-2xl pt-2 font-bold">¿Como ganar?</h3>
                 <p>
-                  Algunos niveles pueden tener 2 tableros tanto para el jugador
-                  como para el bot, el juego termina cuando el patrón ganador
-                  esta formado en uno de los tableros
-                </p>
-
-                <p>
-                  El juego termina cuando tú formas el patrón objetivo en el
-                  tablero y pulsas el botón "Comprobar patrón" para ganar la
-                  partida o si tu oponente forma el patrón objetivo y tu piedes,
-                  lo cual tendras que volver a intentar la partida.
+                  Marca los números correctamente en tu tablero. Cuando creas
+                  haber completado el patrón, presiona el botón {""}
+                  <span className="font-semibold">"Comprobar patrón"</span>. Si
+                  el patrón es correcto, ganas la partida. Si un bot completa el
+                  patrón antes que tú, perderás y deberás intentarlo de nuevo.
                 </p>
               </div>
               <div className="mt-10">
