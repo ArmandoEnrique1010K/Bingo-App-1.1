@@ -7,6 +7,7 @@ import {
   ResultNumberBoardsBot,
   SelectedNumbers,
   SelectedPositions,
+  Winner,
 } from "../../types";
 import { dynamicInterval } from "../../utils/dynamicInterval";
 import BotBoardNumbers from "./BotBoardNumbers";
@@ -18,10 +19,12 @@ type BotsProps = {
   name: string;
   patterns: Pattern[];
   boards: number;
-  handleSetDefeat: (boolean: boolean) => void;
-  defeat: boolean;
-  handleSetVictory: (boolean: boolean) => void;
-  victory: boolean;
+  // handleSetDefeat: (boolean: boolean) => void;
+  // defeat: boolean;
+  // handleSetVictory: (boolean: boolean) => void;
+  // victory: boolean;
+  winner: Winner
+  setWinner: React.Dispatch<React.SetStateAction<Winner>>
   handleCleanTargets: () => void;
   nextBoards: number;
 };
@@ -32,10 +35,12 @@ export default function Bots({
   interval,
   name,
   patterns,
-  handleSetDefeat,
-  defeat,
-  handleSetVictory,
-  victory,
+  winner,
+  setWinner,
+  // handleSetDefeat,
+  // defeat,
+  // handleSetVictory,
+  // victory,
   boards,
   handleCleanTargets,
   nextBoards,
@@ -63,11 +68,15 @@ export default function Bots({
   // Genera los tableros al inicio o cuando cambia el número de tableros
   // Conviene usar useMemo para generar los tableros
   const newBoards = useMemo(() => {
-    return Array.from({ length: boards }).map((_, index) => ({
-      id: index + 1, // ID del tablero, evita el valor 0
-      board: generateBoard(), // Genera un tablero aleatorio
-    }));
-  }, [defeat]);
+    if (winner === 'none') {
+      return Array.from({ length: boards }).map((_, index) => ({
+        id: index + 1, // ID del tablero, evita el valor 0
+        board: generateBoard(), // Genera un tablero aleatorio
+      }));
+    } else {
+      return []
+    }
+  }, [winner]);
 
   // READY??? : DE ALGUNA MANERA, SI EL BOT HA GANADO, DEBE DEJAR DE SEGUIR EVALUANDO
 
@@ -81,7 +90,7 @@ export default function Bots({
   // Efecto principal: evalúa los números objetivos y los marca automáticamente
 
   useEffect(() => {
-    if (!botBoard.length || !targets.length || defeat) return; // Si no hay tableros, objetivos o el juego terminó, no ejecuta
+    if (!botBoard.length || !targets.length || winner === 'bot') return; // Si no hay tableros, objetivos o el juego terminó, no ejecuta
 
     // Limpia los temporizadores previos
     timeoutIds.forEach((id) => clearTimeout(id));
@@ -118,7 +127,7 @@ export default function Bots({
     return () => {
       newTimeoutIds.forEach((id) => clearTimeout(id));
     };
-  }, [currentLevel, targets, botBoard, interval, result, name, defeat]);
+  }, [currentLevel, targets, botBoard, interval, result, name, winner]);
 
   // Efecto: Encuentra los números objetivos en los tableros
   useEffect(() => {
@@ -208,9 +217,9 @@ export default function Bots({
 
   // Verifica si un patrón ganador está presente en los tableros del bot
   const handleCheckWinnerPatternBot = () => {
-    if (defeat) return; // Si el juego terminó, no evalúa
+    if (winner === 'bot') return; // Si el juego terminó, no evalúa
 
-    if (victory) return;
+    if (winner === 'player') return;
     // Itera por cada tablero del bot
     for (const board of botSelectedPositions) {
       // Si tiene el patrón ganador en
@@ -227,18 +236,28 @@ export default function Bots({
         // );
 
         const timeoutId = setTimeout(() => {
-          if (victory) {
-            handleCleanTargets();
-            handleSetDefeat(false);
-            handleSetVictory(true);
-            console.log('EJECUTANDO LA FUNCIÓN LUEGO DE 5 SEGUNDOS SI HUBO VICTORIA')
-            return
-          } else {
-            handleSetDefeat(true);
-            handleSetVictory(false)
-            console.log('EJECUTANDO LA FUNCIÓN LUEGO DE 5 SEGUNDOS SI HUBO DERROTA')
-            return
-          }
+
+          setWinner((prevWinner) => {
+            if (prevWinner === 'none') {
+              handleCleanTargets()
+              return 'bot'
+            }
+
+            return prevWinner
+          })
+
+          // if (victory) {
+          //   handleCleanTargets();
+          //   handleSetDefeat(false);
+          //   handleSetVictory(true);
+          //   console.log('EJECUTANDO LA FUNCIÓN LUEGO DE 5 SEGUNDOS SI HUBO VICTORIA')
+          //   return
+          // } else {
+          //   handleSetDefeat(true);
+          //   handleSetVictory(false)
+          //   console.log('EJECUTANDO LA FUNCIÓN LUEGO DE 5 SEGUNDOS SI HUBO DERROTA')
+          //   return
+          // }
 
 
           // if (victory) {
@@ -284,7 +303,7 @@ export default function Bots({
 
   // Reinicia el bot si el bot gana
   useEffect(() => {
-    if (!defeat) {
+    if (winner === 'none') {
       setBotBoard(newBoards);
       setBotSelectedPositions(
         Array.from({ length: boards }).map((_, index) => ({
@@ -299,7 +318,7 @@ export default function Bots({
         }))
       );
     }
-  }, [defeat]);
+  }, [winner]);
 
   const getQuantityBoards = () => {
     console.log(boards);

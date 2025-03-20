@@ -65,3 +65,5 @@ export type ResultNumberBoardsBot = {
         number: number
     }[]
 }[]
+
+export type Winner = 'player' | 'bot' | 'none'

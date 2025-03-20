@@ -1,16 +1,18 @@
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { Winner } from "../../types";
 
 type DefeatModalProps = {
   level: number;
-  handleSetDefeat: (boolean: boolean) => void;
+  setWinner: React.Dispatch<React.SetStateAction<Winner>>
+  // handleSetDefeat: (boolean: boolean) => void;
 };
 
 // Ventana modal para mostrar en el caso de que el jugador haya perdido el nivel (derrotado por un bot)
 export default function DefeatModal({
   level,
-  handleSetDefeat,
+  setWinner,
 }: DefeatModalProps) {
   const navigate = useNavigate();
 
@@ -27,13 +29,17 @@ export default function DefeatModal({
   // Función para salir del juego
   function exit() {
     navigate("/");
-    handleSetDefeat(false);
+    setWinner('none')
+    // handleSetDefeat(false);
   }
 
   // Función para volver a intentar el mismo nivel
   function tryAgain() {
     navigate(`/level_${level}`);
-    handleSetDefeat(false);
+    setWinner('none')
+
+    // handleSetDefeat(false);
+
     close();
   }
 

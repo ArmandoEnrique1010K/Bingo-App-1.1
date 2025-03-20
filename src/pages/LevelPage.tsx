@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { levels } from "../data/levels";
 import { generateBoard } from "../utils/generateBoard";
-import { BoardID, Pattern, SelectedNumbers, SelectedPositions } from "../types";
+import { BoardID, Pattern, SelectedNumbers, SelectedPositions, Winner } from "../types";
 import TargetsNumbers from "../components/Target/TargetNumbers";
 import BoardNumbers from "../components/Player/BoardNumbers";
 import TargetPattern from "../components/Target/TargetPattern";
@@ -41,10 +41,13 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   const [selectedNumbers, setSelectedNumbers] = useState<SelectedNumbers>([]);
 
   // Fin del juego si el jugador gano
-  const [victory, setVictory] = useState(false);
+  // const [victory, setVictory] = useState(false);
+
+  // Ganador
+  const [winner, setWinner] = useState<Winner>('none');
 
   // Fin del juego si el bot gana
-  const [defeat, setDefeat] = useState(false);
+  // const [defeat, setDefeat] = useState(false);
 
   // Turno o ronda
   const [round, setRound] = useState(0);
@@ -66,7 +69,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
 
   // Genera los tableros de acuerdo a la cantidad asignada en la propiedad boards del nivel actual
   const newBoards = useMemo(() => {
-    if (defeat === false) {
+    if (winner === 'none') {
       console.log('GENERANDO NUEVOS TABLEROS');
       return Array.from({ length: currentLevel.boards }).map((_, index) => ({
         id: index + 1,
@@ -76,7 +79,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
       return []
     }
 
-  }, [currentLevel.level, defeat]);
+  }, [currentLevel.level, winner]);
 
   // Función para establecer los valores iniciales al empezar o reiniciar el nivel
   const resetLevel = () => {
@@ -103,8 +106,9 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
     // Ronda 0
     setRound(0);
     // Aun no hay victoria ni derrota
-    setVictory(false);
-    setDefeat(false);
+    setWinner('none')
+    // setVictory(false);
+    // setDefeat(false);
     setExcludedTargetNumbers([]);
   };
 
@@ -116,10 +120,10 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   // Cuando el jugador pierde, se tiene que volver a reiniciar el nivel
   // Nota: El state de defeat debe volver a ser false
   useEffect(() => {
-    if (defeat === false) {
+    if (winner === 'none') {
       resetLevel();
     }
-  }, [defeat]);
+  }, [winner]);
 
   // Función para cambiar los numeros objetivos
   const handleChangeTargets = () => {
@@ -236,8 +240,9 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
         )
       ) {
         // Se establece victory en true
-        setVictory(true);
-        setDefeat(false);
+        setWinner('player')
+        // setVictory(true);
+        // setDefeat(false);
 
         // console.log("El jugador ha ganado el nivel " + level);
 
@@ -261,13 +266,13 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   };
 
   // Funciones para establecer los states de defeat y victory
-  const handleSetDefeat = (boolean: boolean) => {
-    setDefeat(boolean);
-  };
+  // const handleSetDefeat = (boolean: boolean) => {
+  //   setDefeat(boolean);
+  // };
 
-  const handleSetVictory = (boolean: boolean) => {
-    setVictory(boolean);
-  };
+  // const handleSetVictory = (boolean: boolean) => {
+  //   setVictory(boolean);
+  // };
 
   // Función para limpiar los numeros objetivos
   const handleCleanTargets = () => {
@@ -476,10 +481,12 @@ grid gap-3  mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-[10%] ${
                   nextBoards={
                     bot.boards ? currentLevel.bots[index + 1]?.boards : 0
                   }
-                  defeat={defeat}
-                  handleSetDefeat={handleSetDefeat}
-                  victory={victory}
-                  handleSetVictory={handleSetVictory}
+                  winner={winner}
+                  setWinner={setWinner}
+                  // defeat={defeat}
+                  // handleSetDefeat={handleSetDefeat}
+                  // victory={victory}
+                  // handleSetVictory={handleSetVictory}
                   handleCleanTargets={handleCleanTargets}
                 />
               ))
@@ -490,11 +497,12 @@ grid gap-3  mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-[10%] ${
 
         {
           // Si el jugador ha perdido
-          defeat === true && (
+          winner === 'bot' && (
             // Muestra la ventana modal que se muestra automaticamente
             <DefeatModal
               level={currentLevel.level}
-              handleSetDefeat={handleSetDefeat}
+              // handleSetDefeat={handleSetDefeat}
+              setWinner={setWinner}
             />
           )
         }
