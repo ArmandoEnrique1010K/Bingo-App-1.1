@@ -30,12 +30,8 @@ export type Numbers = {
 
 // Tablero de numeros (arreglo de objetos)
 export type Board = {
-    position: number, // Posición
-    number: number // Número
-
-    // No se recomienda utilizar el sistema de coordenadas, por el momento
-    // x: number,
-    // y: number,
+    position: number,
+    number: number
 }[]
 
 // Tableros con un identificador (arreglo de objetos)

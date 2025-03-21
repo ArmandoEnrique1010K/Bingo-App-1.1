@@ -1,5 +1,6 @@
 import { Board } from "../../types";
 import ColumnNumbers from "./ColumnNumbers";
+import { SelectedNumbers } from '../../types/index';
 
 type BoardNumbersProps = {
   board: Board;
@@ -10,6 +11,7 @@ type BoardNumbersProps = {
   ) => void;
   handleIsSelectedNumber: (idBoard: number, position: number) => boolean;
   idBoard: number;
+  selectedNumbers: SelectedNumbers
 };
 
 export default function BoardNumbers({
@@ -17,6 +19,7 @@ export default function BoardNumbers({
   handleClickButton,
   handleIsSelectedNumber,
   idBoard,
+  selectedNumbers,
 }: BoardNumbersProps) {
   return (
     <>
@@ -31,6 +34,7 @@ export default function BoardNumbers({
             idBoard={idBoard}
             min={index * 5 + 1}
             max={(index + 1) * 5}
+            selectedNumbers={selectedNumbers}
           />
         ))}
       </div>

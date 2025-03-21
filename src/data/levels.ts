@@ -45,7 +45,7 @@ export const levels: Level[] = [
         // Nivel
         level: 1,
         // Numero de bolitas o numeros objetivos
-        targetQuantity: 5,
+        targetQuantity: 20,
         // Texto descriptivo para el patron objetivo
         targetText: "Una columna o una fila de 5 números",
         // Numero de tableros del jugador
