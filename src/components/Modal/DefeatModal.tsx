@@ -37,9 +37,6 @@ export default function DefeatModal({
   function tryAgain() {
     navigate(`/level_${level}`);
     setWinner('none')
-
-    // handleSetDefeat(false);
-
     close();
   }
 
@@ -78,13 +75,13 @@ export default function DefeatModal({
                   onClick={tryAgain}
                   // Recuerda las pseudoclases de tailwind: hover (el cursor esta
                   // sobre el elemento) y active (al hacer clic en el botón)
-                  className="w-full py-2 px-4 font-semibold bg-cyan-500 text-white rounded-lg text-lg hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none transition-all duration-300"
+                  className="w-full py-2 px-4 font-semibold bg-cyan-500 text-white rounded-lg text-lg hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none "
                 >
                   Volver a intentarlo
                 </Button>
                 <Button
                   onClick={exit}
-                  className="w-full py-2 px-4 font-semibold bg-gray-500 text-white rounded-lg text-lg hover:bg-gray-600 active:bg-gray-700  focus:outline-none transition-all duration-300"
+                  className="w-full py-2 px-4 font-semibold bg-gray-500 text-white rounded-lg text-lg hover:bg-gray-600 active:bg-gray-700  focus:outline-none "
                 >
                   Salir al menú
                 </Button>

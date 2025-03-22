@@ -63,3 +63,5 @@ export type ResultNumberBoardsBot = {
 }[]
 
 export type Winner = 'player' | 'bot' | 'none'
+
+export type Direction = 'left' | 'right'

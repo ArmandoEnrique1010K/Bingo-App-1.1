@@ -1,16 +1,19 @@
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { Winner } from "../../types";
 
 type VictoryModalProps = {
   level: number;
   handleCheckWinnerPattern: () => boolean;
+  setWinner: React.Dispatch<React.SetStateAction<Winner>>
 };
 
 // Ventana modal para mostrar que el jugador ha ganado el nivel
 export default function VictoryModal({
   level,
   handleCheckWinnerPattern,
+  setWinner,
 }: VictoryModalProps) {
   // Repite el mismo procedimiento definido en LeaveModal
   const navigate = useNavigate();
@@ -23,6 +26,7 @@ export default function VictoryModal({
 
   function close() {
     setIsOpen(false);
+    setWinner('none')
   }
 
   // Redirige hacia la página de inicio
@@ -44,7 +48,7 @@ export default function VictoryModal({
       <button
         onClick={check}
         className="bg-cyan-500 text-white font-semibold px-6 sm:py-3 py-2 rounded-lg shadow-black shadow-md 
-                hover:bg-cyan-600 active:bg-cyan-700 transition duration-300 sm:text-base text-sm"
+                hover:bg-cyan-600 active:bg-cyan-700 sm:text-base text-sm"
       >
         Comprobar patrón
       </button>
@@ -92,7 +96,7 @@ export default function VictoryModal({
                     // Se establece en la propiedad to la ruta hacia el siguiente nivel y al
                     // hacer clic en el enlace, se cerrara la ventana modal
                     <Link
-                      className="w-full py-2 px-4 font-semibold bg-cyan-500 text-white rounded-lg text-lg hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none transition-all duration-300 text-center"
+                      className="w-full py-2 px-4 font-semibold bg-cyan-500 text-white rounded-lg text-lg hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none  text-center"
                       to={`/level_${level + 1}`}
                       onClick={close}
                     >
@@ -104,7 +108,7 @@ export default function VictoryModal({
                 {/* Botón para salir del juego */}
                 <Button
                   onClick={exit}
-                  className="w-full py-2 px-4 font-semibold bg-gray-500 text-white rounded-lg text-lg hover:bg-gray-600 active:bg-gray-700  focus:outline-none transition-all duration-300"
+                  className="w-full py-2 px-4 font-semibold bg-gray-500 text-white rounded-lg text-lg hover:bg-gray-600 active:bg-gray-700  focus:outline-none "
                 >
                   Salir al menú
                 </Button>

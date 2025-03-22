@@ -34,7 +34,7 @@ export default function LeaveModal() {
       <button
         onClick={open}
         className="bg-cyan-500 text-white font-semibold px-6 sm:py-3 py-2 rounded-lg shadow-black 
-            shadow-md hover:bg-cyan-600 active:bg-cyan-700 transition duration-300 sm:text-base text-sm"
+            shadow-md hover:bg-cyan-600 active:bg-cyan-700  sm:text-base text-sm"
       >
         Abandonar partida
       </button>
@@ -74,13 +74,13 @@ export default function LeaveModal() {
                 <Button
                   // Solamente llama a la función respectivamente
                   onClick={leaveGame}
-                  className="w-full py-2 px-4 bg-gray-500 text-white rounded-lg text-lg hover:bg-gray-600 active:bg-gray-700 focus:outline-none transition-all duration-300"
+                  className="w-full py-2 px-4 bg-gray-500 text-white rounded-lg text-lg hover:bg-gray-600 active:bg-gray-700 focus:outline-none "
                 >
                   Si
                 </Button>
                 <Button
                   onClick={close}
-                  className="w-full py-2 px-4 bg-cyan-500 text-white rounded-lg text-lg hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none transition-all duration-300"
+                  className="w-full py-2 px-4 bg-cyan-500 text-white rounded-lg text-lg hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none "
                 >
                   No
                 </Button>

@@ -2,7 +2,6 @@ import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
-// Ventana modal que muestra las instrucciones del juego
 export default function Help() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -16,7 +15,6 @@ export default function Help() {
 
   return (
     <>
-      {/* Aplicale estilos al icono para que se muestre */}
       <button
         onClick={open}
         className="sm:py-4 py-2 px-3 text-cyan-500 hover:text-cyan-600 active:text-cyan-700"
@@ -27,7 +25,7 @@ export default function Help() {
       <Dialog
         open={isOpen}
         as="div"
-        className="relative z-10 focus:outline-none "
+        className="relative z-10 focus:outline-none"
         onClose={close}
       >
         {/* Aplica el color de fondo con opacidad */}
@@ -110,7 +108,7 @@ export default function Help() {
               <div className="mt-10">
                 <Button
                   onClick={close}
-                  className="w-full py-2 px-4 bg-gray-700 text-white rounded-lg text-lg hover:bg-gray-600 focus:outline-none transition-all duration-300"
+                  className="w-full py-2 px-4 bg-gray-700 text-white rounded-lg text-lg hover:bg-gray-600 focus:outline-none "
                 >
                   Cerrar
                 </Button>

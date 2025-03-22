@@ -3,6 +3,7 @@ import { levels } from "../data/levels";
 import { generateBoard } from "../utils/generateBoard";
 import {
   BoardID,
+  Direction,
   Pattern,
   SelectedNumbers,
   SelectedPositions,
@@ -11,7 +12,7 @@ import {
 import TargetsNumbers from "../components/Target/TargetNumbers";
 import BoardNumbers from "../components/Player/BoardNumbers";
 import TargetPattern from "../components/Target/TargetPattern";
-import Bot from "../components/Bot/Bot";
+import Bot from "../components/Bot/Bots";
 import LeaveModal from "../components/Modal/LeaveModal";
 import DefeatModal from "../components/Modal/DefeatModal";
 import VictoryModal from "../components/Modal/VictoryModal";
@@ -30,6 +31,12 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
 
   // Tableros del jugador
   const [board, setBoard] = useState<BoardID>([]);
+
+  // Id de los tableros
+  const [boardsId, setBoardsId] = useState<number[]>([0])
+
+  // Id del ablero actual, incialmente selecciona el primer tablero
+  const [currentBoardId, setcurrentBoardId] = useState<number>(0);
 
   // Numeros objetivos
   const [targets, setTargets] = useState<number[]>([]);
@@ -52,16 +59,19 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   // Números excluidos (ya que se mostraron en los números objetivos)
   const [excludedTargets, setExcludedTargets] = useState<number[]>([]);
 
-  // Establece los patrones ganadores del nivel actual
+  // Vista en diseño responsive
+  const [viewPlayerBoard, setViewPlayerBoard] = useState(true);
+
+  // Establece los patrones ganadores y el id de los tableros del nivel actual
   useEffect(() => {
-    const patterns = currentLevel.patterns;
-    setPatterns(patterns);
+    setPatterns(currentLevel.patterns);
+    setBoardsId(newBoards.map(n => n.id));
+    setcurrentBoardId(newBoards.length > 0 ? newBoards[0].id : 0)
   }, [currentLevel]);
 
   // Usar useMemo de esta manera asegura que newBoards se recalcule solo cuando currentLevel.level o winner cambie, lo cual es una buena práctica para evitar renders innecesarios y mejorar el rendimiento.
   const newBoards = useMemo(() => {
     if (winner === "none") {
-      console.log("GENERANDO NUEVOS TABLEROS");
       return Array.from({ length: currentLevel.boards }).map((_, index) => ({
         id: index + 1,
         board: generateBoard(),
@@ -69,10 +79,11 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
     } else {
       return [];
     }
+
   }, [currentLevel.level, winner]);
 
-  // Establece los valores iniciales
-  const resetLevel = () => {
+  // Establece los valores iniciales...
+  const resetLevel = (): void => {
     setBoard(newBoards);
     setTargets([]);
     setRound(0);
@@ -96,7 +107,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
     );
   };
 
-  // Establece los valores iniciales si no hay ningun ganador
+  // ...si no hay ningun ganador
   useEffect(() => {
     if (winner === "none") {
       resetLevel();
@@ -104,7 +115,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   }, [winner]);
 
   // Cambia los numeros objetivos
-  const handleChangeTargets = () => {
+  const handleChangeTargets = (): void => {
     setRound((prevRound) => prevRound + 1);
     setTargets([]);
 
@@ -115,7 +126,6 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
       setExcludedTargets((prevExcluded) => [...prevExcluded, ...newTargets]);
     }, 1000);
   };
-
 
   // Verifica que el número ya se encuentre marcado en el tablero
   const isSelectedNumber = (idBoard: number, number: number): boolean => {
@@ -130,8 +140,8 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   ): void => {
     // Verifica si el número seleccionado es un número objetivo y si aún no ha sido marcado en el tablero.
     if (targets.includes(number) && !isSelectedNumber(idBoard, number)) {
-      // Agrega la posición y el número a los estados. 
-      // Para aquello, se crea una copia del estado anterior y se actualiza el tablero correspondiente, agregando la nueva posición y el nuevo número al array correspondiente.
+
+      // Crea una copia del estado anterior y se actualiza el tablero correspondiente, agregando la nueva posición y el nuevo número al array correspondiente.
       setSelectedPositions((prevState) =>
         prevState.map((board) =>
           board.idBoard === idBoard
@@ -150,13 +160,13 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   };
 
 
-  // Función para verificar si es un número seleccionado según el tablero
+  // Verifica si es un número seleccionado según el tablero
   const handleIsSelectedNumber = (idBoard: number, number: number): boolean => {
     return selectedNumbers.find((board) => board.idBoard === idBoard)?.numbers.includes(number) || false;
   };
 
   // Verifica si el usuario ha completado un patrón ganador en alguno de sus tableros
-  const handleCheckWinnerPattern = () => {
+  const handleCheckWinnerPattern = (): boolean => {
     // Recorre las posiciones seleccionadas de cada tablero y compara con los patrones ganadores
     for (const board of selectedPositions) {
       // La verificación se realiza de la siguiente manera:
@@ -166,10 +176,8 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
       if (patterns?.some((p) => p.every((n) => board.positions.some((position) => position === n)))) {
         setWinner("player");
 
-        // Limpia los números objetivos
+        // Limpia los números objetivos y desbloquea el siguiente nivel
         setTargets([]);
-
-        // Desbloquea el siguiente nivel
         if (level !== 20) {
           unlockLevel(level + 1);
         }
@@ -180,40 +188,29 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   };
 
   // Limpia los números objetivos
-  const handleCleanTargets = () => {
+  const handleCleanTargets = (): void => {
     setTargets([]);
   };
 
-  // Tablero actual, incialmente selecciona el primer tablero
-  const [currentBoard, setCurrentBoard] = useState(
-    // () => newBoards.find((b) => b.id === 1)?.id || 0
-    () => newBoards.length > 0 ? newBoards[0].id : 0
-  );
-
   // Verifica si un tablero existe
-  const verifyExistBoard = (id: number) => newBoards.some((b) => b.id === id);
+  const verifyExistBoard = (id: number): boolean => newBoards.some((b) => b.id === id);
 
   // Cambia el tablero actual
-  const handleChangeBoard = (direction: "prev" | "next") => {
-    const newBoardId =
-      direction === "prev" ? currentBoard - 1 : currentBoard + 1;
+  const handleChangeBoard = (direction: Direction): void => {
+    const newBoardId = direction === "left" ? currentBoardId - 1 : currentBoardId + 1;
     if (verifyExistBoard(newBoardId)) {
-      setCurrentBoard(newBoardId);
+      setcurrentBoardId(newBoardId);
     }
   };
 
-  // Cálculo del primer y último tablero
+  // Verifica si currentBoardId tiene el primer o ultimo tablero por su id
   const isAtFirstBoard = useMemo(() => {
-    return currentBoard === Math.min(...newBoards.map((b) => b.id));
-  }, [currentBoard, newBoards]);
+    return currentBoardId === boardsId[0];
+  }, [currentBoardId, boardsId]);
 
   const isAtLastBoard = useMemo(() => {
-    return currentBoard === Math.max(...newBoards.map((b) => b.id));
-  }, [currentBoard, newBoards]);
-
-
-  // Vista en diseño responsive
-  const [viewPlayerBoard, setViewPlayerBoard] = useState(true);
+    return currentBoardId === boardsId[boardsId.length - 1];
+  }, [currentBoardId, boardsId]);
 
   // Cambia la vista en diseño responsive
   const handleChangeViewPlayerBoard = () => {
@@ -244,121 +241,75 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
               />
             </div>
 
-            {/* Patrón ganador objetivo */}
+            {/* Patrón ganador */}
             <TargetPattern
               level={currentLevel.level}
               text={currentLevel.targetText}
             />
           </div>
 
-          {/* Botones para comprobar el patron ganador y salir del juego */}
-
+          {/* Botones para comprobar el patron ganador y salir del nivel */}
           {viewPlayerBoard === true && (
             <div className="flex flex-col gap-4 sm:mx-0 mx-auto">
               <div className="flex flex-row mx-auto border-4 border-gray-700 rounded-xl">
                 {
-                  // Renderiza BoardNumbers por la cantidad de boards en currentLevel
-                  Array.from({ length: currentLevel.boards }).map(
-                    (_, index) =>
-                      // TODO: BUSCAR EL TABLERO POR EL INDEX
-                      // index + 1 <-- obtiene el id
-
-                      currentBoard === index + 1 && (
-                        <BoardNumbers
-                          selectedNumbers={selectedNumbers}
-                          key={index}
-                          idBoard={index}
-                          // Busca el tablero por su id y lo pasa como propiedad
-                          board={
-                            board.find((b) => b.id === index + 1)?.board || []
-                          }
-                          handleIsSelectedNumber={handleIsSelectedNumber}
-                          handleClickButton={handleClickButton}
-                        />
-                      )
+                  // Renderiza la cantidad de tableros definida en `currentLevel.boards`
+                  Array.from({ length: currentLevel.boards }).map((_, index) =>
+                    // Solo renderiza el tablero si coincide con el ID del tablero actual
+                    currentBoardId === index + 1 && (
+                      <BoardNumbers
+                        selectedNumbers={selectedNumbers}
+                        key={index}
+                        idBoard={index}
+                        // Pasa el tablero por su id
+                        board={board.find((b) => b.id === index + 1)?.board || []}
+                        handleIsSelectedNumber={handleIsSelectedNumber}
+                        handleClickButton={handleClickButton}
+                      />
+                    )
                   )
                 }
               </div>
+
               <div className="bg-gray-700 flex flex-col px-3 sm:mx-0 mx-3 gap-3 rounded-xl py-4">
+                {/* Botones para cambiar entre tableros */}
                 <div className="flex flex-row justify-between gap-4">
                   <button
-                    className={`
-                                                
-                                                px-4 sm:py-3 py-2 font-semibold rounded-lg shadow-md 
-            transition duration-300  w-full  shadow-black 
-            ${isAtFirstBoard
-                        ? "bg-gray-500 text-white cursor-not-allowed"
-                        : "bg-cyan-500 hover:bg-cyan-600 text-white"
-                      }`}
-                    onClick={() => handleChangeBoard("prev")}
+                    className={`px-4 sm:py-3 py-2 font-semibold rounded-lg shadow-md w-full  shadow-black ${isAtFirstBoard ? "bg-gray-500 text-white cursor-not-allowed" : "bg-cyan-500 hover:bg-cyan-600 text-white"}`}
+                    onClick={() => handleChangeBoard("left")}
                     disabled={isAtFirstBoard}
                   >
                     <ArrowLeftIcon className="h-6 mx-auto" />
                   </button>
 
                   <button
-                    className={`px-4 sm:py-3 py-2 font-semibold rounded-lg shadow-md 
-            transition duration-300 w-full  sm:text-base text-sm shadow-black 
-            ${isAtLastBoard
-                        ? "bg-gray-500 text-white cursor-not-allowed"
-                        : "bg-cyan-500 hover:bg-cyan-600 text-white"
-                      }`}
-                    onClick={() => handleChangeBoard("next")}
+                    className={`px-4 sm:py-3 py-2 font-semibold rounded-lg shadow-md w-full  sm:text-base text-sm shadow-black ${isAtLastBoard ? "bg-gray-500 text-white cursor-not-allowed" : "bg-cyan-500 hover:bg-cyan-600 text-white"}`}
+                    onClick={() => handleChangeBoard("right")}
                     disabled={isAtLastBoard}
                   >
                     <ArrowRightIcon className="h-6 mx-auto" />
                   </button>
                 </div>
+
+                {/* Botones para comprobar el patrón ganador y salir del nivel */}
                 <div className="flex flex-row justify-center gap-4">
                   <VictoryModal
                     level={level}
                     handleCheckWinnerPattern={handleCheckWinnerPattern}
+                    setWinner={setWinner}
                   />
                   <LeaveModal />
                 </div>
               </div>
-
-              {/* <div className="flex flex-row justify-center gap-4">
-                    </div> */}
-              {/* <div className="bg-gray-700 flex flex-row px-3 justify-between gap-3 items-center rounded-xl py-4">
-
-
-
-                    </div>
- */}
             </div>
           )}
         </div>
 
-        {/* Boton para alternar entre la vista del tablero del jugador y los bots */}
-        {/* Diseño de cuadricula en tailwind: grid grid-cols-4 grid-rows-2 */}
-
-        {/* TODO: UTILIZAR LA CLASE hidden PODRIA SER UNA OPCION VIABLE??? */}
-
-        {/*
-                    className={`
-              sm:flex 
-              sm:flex-row grid  
-              grid-cols-2 
-              items-center 
-              bg-red-500 
-              justify-center  
-              sm:mx-auto 
-              sm:mt-4 mt-0 mx-2 gap-3 mb-4 ${
-              viewPlayerBoard === false ? "" : "hidden"
-            }`}
-             */}
         {
-          // TODO: EXPLICAR ESTO
-          <div
-            className={`
-              grid gap-3 mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-auto container
-              ${viewPlayerBoard === false ? "grid" : "hidden"} 
-              sm:grid
-            `}
-          >
+          // Contenedor dinámico para mostrar los tableros de los bots
+          <div className={`grid gap-3 mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-auto container ${viewPlayerBoard === false ? "grid" : "hidden"} sm:grid`}>
             {
-              // SECCION PARA AGRUPAR TODOS LOS BOTS
+              // Grupo de los bots
               currentLevel.bots.map((bot, index) => (
                 <Bot
                   key={bot.name}
@@ -368,17 +319,10 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
                   name={bot.name}
                   patterns={patterns}
                   boards={bot.boards}
-                  // Obten los tableros del siguiente bot en la lista, de lo contrario un undefined
-
-                  nextBoards={
-                    bot.boards ? currentLevel.bots[index + 1]?.boards : 0
-                  }
+                  // Obtiene los tableros del siguiente bot en la lista, o 0 si no hay más
+                  nextBoards={bot.boards ? currentLevel.bots[index + 1]?.boards : 0}
                   winner={winner}
                   setWinner={setWinner}
-                  // defeat={defeat}
-                  // handleSetDefeat={handleSetDefeat}
-                  // victory={victory}
-                  // handleSetVictory={handleSetVictory}
                   handleCleanTargets={handleCleanTargets}
                 />
               ))
@@ -397,12 +341,13 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
         }
       </div>
 
-      {/* Botón en la esquina inferior derecha de la pantalla, oculto si la pantalla es mayor que 640px */}
+      {/* Botón en la esquina inferior derecha de la pantalla, visible solo en pantallas pequeñas */}
       <div className="fixed bottom-4 right-4 text-right sm:hidden">
         <button
           className="bg-cyan-500 p-3 rounded-full shadow-lg hover:bg-cyan-600 active:bg-cyan-700"
           onClick={handleChangeViewPlayerBoard}
         >
+          {/* Muestra un ícono diferente dependiendo de la vista actual */}
           {viewPlayerBoard === true ? (
             <img src="images/bot.svg" alt="Bot" className="w-8 h-8" />
           ) : (
