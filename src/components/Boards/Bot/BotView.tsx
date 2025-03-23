@@ -2,7 +2,7 @@ import { useBot } from "../../../hooks/useBot";
 import { Level, Pattern, Winner } from "../../../types";
 import BotBoardView from "./BotBoardView";
 
-type BotProps = {
+type BotViewProps = {
   currentLevel: Level;
   targets: number[];
   interval: number;
@@ -25,7 +25,7 @@ export default function BotView({
   boards,
   clearTargets,
   nextBoards,
-}: BotProps) {
+}: BotViewProps) {
   const { handleIsSelectedNumber, botBoard } = useBot({
     winner,
     boards,

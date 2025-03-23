@@ -1,7 +1,7 @@
 import { Board, SelectedNumbers } from "../../../types";
-import ButtonNumber from "./PlayerButtonView";
+import PlayerNumberView from "./PlayerNumberView";
 
-type RowNumbersProps = {
+type PlayerColumnViewProps = {
   numberBoard: Board;
   isNumberSelected: (idBoard: number, position: number) => boolean;
   handleNumberSelection: (
@@ -15,7 +15,7 @@ type RowNumbersProps = {
   selectedNumbers: SelectedNumbers;
 };
 
-export default function ColumnNumbers({
+export default function PlayerColumnView({
   numberBoard,
   isNumberSelected,
   handleNumberSelection,
@@ -23,7 +23,7 @@ export default function ColumnNumbers({
   min,
   idBoard,
   selectedNumbers,
-}: RowNumbersProps) {
+}: PlayerColumnViewProps) {
   return (
     <div className="flex flex-col gap-2">
       {
@@ -31,7 +31,7 @@ export default function ColumnNumbers({
         numberBoard
           .filter((n) => n.position >= min && n.position <= max)
           .map((n) => (
-            <ButtonNumber
+            <PlayerNumberView
               key={n.position}
               isNumberSelected={isNumberSelected}
               handleNumberSelection={handleNumberSelection}

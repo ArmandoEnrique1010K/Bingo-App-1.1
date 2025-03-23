@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { SelectedNumbers } from "../../../types";
 
-type ButtonNumberProps = {
+type PlayerNumberViewProps = {
   handleNumberSelection: (
     idBoard: number,
     number: number,
@@ -16,13 +16,13 @@ type ButtonNumberProps = {
   selectedNumbers: SelectedNumbers;
 };
 
-export default function ButtonNumber({
+export default function PlayerNumberView({
   handleNumberSelection,
   isNumberSelected,
   value,
   idBoard,
   selectedNumbers,
-}: ButtonNumberProps) {
+}: PlayerNumberViewProps) {
   // Memoriza la selección del número para evitar re-cálculos innecesarios
   const numberSelected = useMemo(() => {
     return isNumberSelected(idBoard, value.number);

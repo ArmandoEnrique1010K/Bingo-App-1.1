@@ -1,8 +1,8 @@
 import { Board } from "../../../types";
-import ColumnNumbers from "./PlayerColumnView";
+import PlayerColumnView from "./PlayerColumnView";
 import { SelectedNumbers } from "../../../types/index";
 
-type BoardViewProps = {
+type PlayerBoardViewProps = {
   board: Board;
   handleNumberSelection: (
     idBoard: number,
@@ -14,18 +14,18 @@ type BoardViewProps = {
   selectedNumbers: SelectedNumbers;
 };
 
-export default function BoardView({
+export default function PlayerBoardView({
   board,
   handleNumberSelection,
   isNumberSelected,
   idBoard,
   selectedNumbers,
-}: BoardViewProps) {
+}: PlayerBoardViewProps) {
   return (
     <div className="flex flex-row gap-2 sm:p-4 p-2 bg-gray-700 justify-center items-center">
       {/* Conviene usar un arreglo para generar dinamicamente las columnas del tablero */}
       {Array.from({ length: 5 }).map((_, index) => (
-        <ColumnNumbers
+        <PlayerColumnView
           key={index}
           numberBoard={board}
           handleNumberSelection={handleNumberSelection}

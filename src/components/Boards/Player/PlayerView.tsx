@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
-import BoardView from "./PlayerBoardView";
+import PlayerBoardView from "./PlayerBoardView";
 import WinnerPlayerModal from "../../Winner/WinnerPlayerModal";
 import ExitModal from "../../Winner/ExitModal";
 import {
@@ -91,7 +91,7 @@ export default function PlayerView({
                 (_, index) =>
                   // Solo renderiza el tablero si coincide con el ID del tablero actual
                   currentBoardId === index + 1 && (
-                    <BoardView
+                    <PlayerBoardView
                       selectedNumbers={selectedNumbers}
                       key={index}
                       idBoard={index}

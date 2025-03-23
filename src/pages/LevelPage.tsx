@@ -1,6 +1,6 @@
 import TargetsNumbers from "../components/Target/TargetNumbersView";
 import TargetPattern from "../components/Target/PatternView";
-import Bot from "../components/Boards/Bot/BotView";
+import BotView from "../components/Boards/Bot/BotView";
 import WinnerBotModal from "../components/Winner/WinnerBotModal";
 import PlayerView from "../components/Boards/Player/PlayerView";
 import { useLevel } from "../hooks/useLevel";
@@ -97,7 +97,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
             {
               // Grupo de los bots
               currentLevel.bots.map((bot, index) => (
-                <Bot
+                <BotView
                   key={bot.name}
                   currentLevel={currentLevel}
                   targets={targets}
