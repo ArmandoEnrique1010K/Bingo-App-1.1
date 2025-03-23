@@ -1,33 +1,33 @@
-import { Board } from "../../types";
-import BotSquareNumber from "./BotSquareNumber";
+import { Board } from "../../../types";
+import BotButtonView from "./BotButtonView";
 
-type BotRowNumbersProps = {
+type BotColumnViewProps = {
   board: Board;
-  handleSelectedPosition: (idBoard: number, position: number) => boolean;
+  handleIsSelectedNumber: (idBoard: number, number: number) => boolean;
   max: number;
   min: number;
   idBoard: number;
 };
 
-export default function BotColumnNumbers({
+export default function BotColumnView({
   board,
-  handleSelectedPosition,
+  handleIsSelectedNumber,
   max,
   min,
   idBoard,
-}: BotRowNumbersProps) {
+}: BotColumnViewProps) {
   return (
     <>
       <div className="flex flex-col">
         {
-          // Itera sobre board seleccionando unos 5 numeros con filter para asignarlos a BotSquareNumber
+          // Itera sobre board seleccionando unos 5 numeros
           board
             .filter((n) => n.position >= min && n.position <= max)
             .map((n) => (
-              <BotSquareNumber
+              <BotButtonView
                 key={n.position}
                 idBoard={idBoard}
-                handleSelectedPosition={handleSelectedPosition}
+                handleIsSelectedNumber={handleIsSelectedNumber}
                 value={{ number: n.number, position: n.position }}
               />
             ))

@@ -3,7 +3,6 @@
 // Nivel (objeto)
 export type Level = {
     level: number
-    targetQuantity: number
     targetText: string
     boards: number
     patterns: Pattern[] // Arreglo de patrones ganadores
@@ -30,12 +29,8 @@ export type Numbers = {
 
 // Tablero de numeros (arreglo de objetos)
 export type Board = {
-    position: number, // Posición
-    number: number // Número
-
-    // No se recomienda utilizar el sistema de coordenadas, por el momento
-    // x: number,
-    // y: number,
+    position: number,
+    number: number
 }[]
 
 // Tableros con un identificador (arreglo de objetos)
@@ -67,3 +62,5 @@ export type ResultNumberBoardsBot = {
 }[]
 
 export type Winner = 'player' | 'bot' | 'none'
+
+export type Direction = 'left' | 'right'

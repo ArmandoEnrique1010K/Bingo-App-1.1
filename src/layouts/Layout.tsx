@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
-import Credits from "../components/Menu/Credits";
-import Music from "../components/Menu/Music";
-import Help from "../components/Menu/Help";
+import Credits from "../components/Menu/CreditsModal";
+import Music from "../components/Menu/MusicButton";
+import Help from "../components/Menu/HelpModal";
 
 // Este componente representa la barra de menu
 export default function Layout() {

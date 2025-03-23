@@ -2,8 +2,7 @@ import { useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
-// Este componente es una ventana modal que muestra la información del autor que desarrollo esta aplicación
-export default function Credits() {
+export default function CreditsModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   function open() {
@@ -16,7 +15,7 @@ export default function Credits() {
 
   return (
     <>
-      {/* El botón contiene un icono de HeroIcons */}
+      {/* Al hacer clic en el botón, abre la ventana modal, además cuenta con un icono de HeroIcons */}
       <button
         onClick={open}
         className="sm:py-4 py-2 px-3  text-cyan-500 hover:text-cyan-600 active:text-cyan-700"
@@ -24,14 +23,13 @@ export default function Credits() {
         <InformationCircleIcon className="sm:w-8 w-6" aria-hidden="true" />
       </button>
 
-      {/* Permite cerrar la ventana modal al hacer clic fuera de ella */}
       <Dialog
         open={isOpen}
         as="div"
-        className="relative z-10 focus:outline-none "
+        className="relative z-10 focus:outline-none"
+        // Al hacer clic fuera de la ventana modal, se cierra
         onClose={close}
       >
-        {/* Aplica el color de fondo con opacidad */}
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-gray-800 bg-opacity-50">
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel
@@ -145,7 +143,7 @@ export default function Credits() {
                 {/* Botón para cerrar manualmente */}
                 <Button
                   onClick={close}
-                  className="w-full py-2 px-4 bg-gray-700 text-white rounded-lg text-lg hover:bg-gray-600 focus:outline-none transition-all duration-300"
+                  className="w-full py-2 px-4 bg-gray-700 text-white rounded-lg text-lg hover:bg-gray-600 focus:outline-none "
                 >
                   Cerrar
                 </Button>

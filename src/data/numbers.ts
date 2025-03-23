@@ -1,6 +1,6 @@
 import { Numbers } from "../types";
 
-// Numeros del 1 al 75 por filas para el tablero
+// Numeros del 1 al 75 por filas
 export const numbers: Numbers = [
     {
         row: 1,

@@ -2,8 +2,8 @@ import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-// Ventana modal para salir del juego
-export default function LeaveModal() {
+// Ventana modal, confirma si va a abandonar la partida
+export default function ExitModal() {
   // Estado para mostrar u ocultar la ventana modal
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,8 +20,7 @@ export default function LeaveModal() {
   }
 
   // Función para salir del juego, redirige hacia el endpoint '/'
-  function leaveGame() {
-    setIsOpen(false);
+  function exit() {
     navigate("/");
   }
 
@@ -29,18 +28,14 @@ export default function LeaveModal() {
     <>
       {/* Inicialmente al renderizar este componente, solamente se podra ver un botón */}
       {/* Al hacer clic en el botón, se mostrara la ventana modal */}
-
-      {/* Por un tema de accesibilidad, se elimina el atributo aria-hidden="true" que viene por defecto */}
+      {/* Se elimina el atributo aria-hidden="true" que viene por defecto */}
       <button
         onClick={open}
-        className="bg-cyan-500 text-white font-semibold px-6 sm:py-3 py-2 rounded-lg shadow-black 
-            shadow-md hover:bg-cyan-600 active:bg-cyan-700 transition duration-300 sm:text-base text-sm"
+        className="bg-cyan-500 text-white font-semibold px-6 sm:py-3 py-2 rounded-lg shadow-black shadow-md hover:bg-cyan-600 active:bg-cyan-700  sm:text-base text-sm"
       >
         Abandonar partida
       </button>
 
-      {/* El codigo para definir una ventana modal de HeadlessUI se obtiene de la documentación */}
-      {/* https://headlessui.com/ */}
       <Dialog
         open={isOpen}
         as="div"
@@ -53,8 +48,7 @@ export default function LeaveModal() {
             {/* El cuadro de dialogo, tiene una transición */}
             <DialogPanel
               transition
-              className="w-full max-w-lg rounded-lg bg-white p-8 shadow-xl transform transition-all duration-300 ease-in-out 
-                            data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+              className="w-full max-w-lg rounded-lg bg-white p-8 shadow-xl transform transition-all duration-300 ease-in-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
             >
               {/* Titulo de la ventana modal */}
               <DialogTitle
@@ -72,15 +66,15 @@ export default function LeaveModal() {
               {/* Botones para salir del juego y cerrar la ventana modal */}
               <div className="mt-10 flex flex-row gap-4">
                 <Button
-                  // Solamente llama a la función respectivamente
-                  onClick={leaveGame}
-                  className="w-full py-2 px-4 bg-gray-500 text-white rounded-lg text-lg hover:bg-gray-600 active:bg-gray-700 focus:outline-none transition-all duration-300"
+                  onClick={exit}
+                  // Pseudoclases de tailwind: hover (el cursor esta sobre el elemento) y active (al hacer clic en el botón)
+                  className="w-full py-2 px-4 bg-gray-500 text-white rounded-lg text-lg hover:bg-gray-600 active:bg-gray-700 focus:outline-none "
                 >
                   Si
                 </Button>
                 <Button
                   onClick={close}
-                  className="w-full py-2 px-4 bg-cyan-500 text-white rounded-lg text-lg hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none transition-all duration-300"
+                  className="w-full py-2 px-4 bg-cyan-500 text-white rounded-lg text-lg hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none "
                 >
                   No
                 </Button>

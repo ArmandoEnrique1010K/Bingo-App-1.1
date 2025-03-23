@@ -32,3 +32,19 @@ Versión de prueba: [Haga clic aqui para jugar](https://stately-hummingbird-3bc0
 ## Captura de pantalla
 
 ![](assets/2025-01-19-16-19-52-image.png)
+
+
+## ENLACES:
+
+https://stackoverflow.com/questions/35435042/how-can-i-define-an-array-of-objects
+
+https://stackoverflow.com/questions/23161486/create-strongly-typed-array-of-arrays-in-typescript
+
+https://github.com/nsamelson/AIGameRunner/blob/a51fad7b8ed9ffeb3c972ccb65c29030c2b9985e/public/games/quixo.js
+
+Aplica el principio de inmutabilidad en React, pues sort() es un metodo que muta el arreglo original
+Tener en cuenta si un metodo muta el arreglo original o no
+https://doesitmutate.xyz/
+Algoritmo de Fisher-Yates
+https://keepcoding.io/blog/algoritmo-de-barajado-de-fisher-yates-en-js/
+https://es.wikipedia.org/wiki/Algoritmo_de_Fisher-Yates
