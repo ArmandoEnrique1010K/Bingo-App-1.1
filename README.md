@@ -23,9 +23,10 @@ Historial de versiones:
 
 - Ahora es adaptable a dispositivos moviles, puedes jugarlo desde tu celular.
 
-1.1: 19/03/25
+1.1: 22/03/25
 
 - Recupere una versión anterior del proyecto (7/2/25) con algunas mejoras.
+- Hice algunas mejoras en los niveles, porque eran dificiles derrotar a un bot.
 
 Versión de prueba: [Haga clic aqui para jugar](https://stately-hummingbird-3bc0f1.netlify.app/)
 
