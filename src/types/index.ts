@@ -3,7 +3,6 @@
 // Nivel (objeto)
 export type Level = {
     level: number
-    targetQuantity: number
     targetText: string
     boards: number
     patterns: Pattern[] // Arreglo de patrones ganadores

@@ -3,20 +3,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Winner } from "../../types";
 
-type DefeatModalProps = {
+type WinnerBotModalProps = {
   level: number;
-  setWinner: React.Dispatch<React.SetStateAction<Winner>>
-  // handleSetDefeat: (boolean: boolean) => void;
+  setWinner: React.Dispatch<React.SetStateAction<Winner>>;
 };
 
-// Ventana modal para mostrar en el caso de que el jugador haya perdido el nivel (derrotado por un bot)
-export default function DefeatModal({
-  level,
-  setWinner,
-}: DefeatModalProps) {
-  const navigate = useNavigate();
-
+// Ventana modal si un bot ha ganado
+export default function WinnerBotModal({ setWinner }: WinnerBotModalProps) {
   const [isOpen, setIsOpen] = useState(true);
+
+  const navigate = useNavigate();
 
   function open() {
     setIsOpen(true);
@@ -26,28 +22,24 @@ export default function DefeatModal({
     setIsOpen(false);
   }
 
-  // Función para salir del juego
   function exit() {
     navigate("/");
-    setWinner('none')
-    // handleSetDefeat(false);
   }
 
-  // Función para volver a intentar el mismo nivel
+  // Volver a intentar el mismo nivel
   function tryAgain() {
-    navigate(`/level_${level}`);
-    setWinner('none')
+    setWinner("none");
     close();
   }
 
   return (
     <>
-      {/* En este caso, no hay un botón para abrir la ventana modal, pues esta ventana modal solamente se mostrara si se renderiza */}
-      {/* Esta ventana modal no se va a cerrar una vez que se abra, porque en la propiedad onClose tiene la función open */}
+      {/* No hay un botón para abrir la ventana modal */}
       <Dialog
         open={isOpen}
         as="div"
-        className="relative z-10 focus:outline-none "
+        className="relative z-10 focus:outline-none"
+        // Evita que el usuario cierre la ventana modal al hacer clic fuera de ella
         onClose={open}
       >
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-gray-800 bg-opacity-50">
@@ -69,12 +61,10 @@ export default function DefeatModal({
                 </p>
               </div>
 
-              {/* Botones para reintentar el nivel y para ir a la pagina de inicio */}
+              {/* Botones para reintentar el nivel e ir a la pagina de inicio */}
               <div className="mt-10 flex flex-row gap-4">
                 <Button
                   onClick={tryAgain}
-                  // Recuerda las pseudoclases de tailwind: hover (el cursor esta
-                  // sobre el elemento) y active (al hacer clic en el botón)
                   className="w-full py-2 px-4 font-semibold bg-cyan-500 text-white rounded-lg text-lg hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none "
                 >
                   Volver a intentarlo

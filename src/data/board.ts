@@ -1,6 +1,6 @@
 import { Board } from "../types";
 
-// Tablero del juego, contiene las posiciones y los números
+// Tablero de bingo
 export const board: Board = [
     {
         position: 1,

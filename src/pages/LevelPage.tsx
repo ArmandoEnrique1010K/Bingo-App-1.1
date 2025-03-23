@@ -13,9 +13,9 @@ import TargetsNumbers from "../components/Target/TargetNumbers";
 import BoardNumbers from "../components/Player/BoardNumbers";
 import TargetPattern from "../components/Target/TargetPattern";
 import Bot from "../components/Bot/Bots";
-import LeaveModal from "../components/Modal/LeaveModal";
-import DefeatModal from "../components/Modal/DefeatModal";
-import VictoryModal from "../components/Modal/VictoryModal";
+import ExitModal from "../components/Modal/ExitModal";
+import WinnerBotModal from "../components/Modal/WinnerBotModal";
+import WinnerPlayerModal from "../components/Modal/WinnerPlayerModal";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
 import { generateTargets } from "../utils/generateTargets";
 
@@ -33,7 +33,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   const [board, setBoard] = useState<BoardID>([]);
 
   // Id de los tableros
-  const [boardsId, setBoardsId] = useState<number[]>([0])
+  const [boardsId, setBoardsId] = useState<number[]>([0]);
 
   // Id del ablero actual, incialmente selecciona el primer tablero
   const [currentBoardId, setcurrentBoardId] = useState<number>(0);
@@ -45,7 +45,9 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   const [patterns, setPatterns] = useState<Pattern[]>([]);
 
   // Posiciones seleccionadas
-  const [selectedPositions, setSelectedPositions] = useState<SelectedPositions>([]);
+  const [selectedPositions, setSelectedPositions] = useState<SelectedPositions>(
+    []
+  );
 
   // Números seleccionados
   const [selectedNumbers, setSelectedNumbers] = useState<SelectedNumbers>([]);
@@ -65,8 +67,8 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   // Establece los patrones ganadores y el id de los tableros del nivel actual
   useEffect(() => {
     setPatterns(currentLevel.patterns);
-    setBoardsId(newBoards.map(n => n.id));
-    setcurrentBoardId(newBoards.length > 0 ? newBoards[0].id : 0)
+    setBoardsId(newBoards.map((n) => n.id));
+    setcurrentBoardId(newBoards.length > 0 ? newBoards[0].id : 0);
   }, [currentLevel]);
 
   // Usar useMemo de esta manera asegura que newBoards se recalcule solo cuando currentLevel.level o winner cambie, lo cual es una buena práctica para evitar renders innecesarios y mejorar el rendimiento.
@@ -79,7 +81,6 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
     } else {
       return [];
     }
-
   }, [currentLevel.level, winner]);
 
   // Establece los valores iniciales...
@@ -119,9 +120,9 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
     setRound((prevRound) => prevRound + 1);
     setTargets([]);
 
-    // Espera 1 seg. para generar los números objetivos (excluyendo los números que fuerón generados)
+    // Espera 1 seg. para generar 3 números objetivos (excluyendo los números que fuerón generados)
     setTimeout(() => {
-      const newTargets = generateTargets(currentLevel.targetQuantity, excludedTargets);
+      const newTargets = generateTargets(3, excludedTargets);
       setTargets(newTargets);
       setExcludedTargets((prevExcluded) => [...prevExcluded, ...newTargets]);
     }, 1000);
@@ -129,7 +130,9 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
 
   // Verifica que el número ya se encuentre marcado en el tablero
   const isSelectedNumber = (idBoard: number, number: number): boolean => {
-    return selectedNumbers.some((board) => board.idBoard === idBoard && board.numbers.includes(number));
+    return selectedNumbers.some(
+      (board) => board.idBoard === idBoard && board.numbers.includes(number)
+    );
   };
 
   // Maneja la selección de un número en el tablero
@@ -140,7 +143,6 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   ): void => {
     // Verifica si el número seleccionado es un número objetivo y si aún no ha sido marcado en el tablero.
     if (targets.includes(number) && !isSelectedNumber(idBoard, number)) {
-
       // Crea una copia del estado anterior y se actualiza el tablero correspondiente, agregando la nueva posición y el nuevo número al array correspondiente.
       setSelectedPositions((prevState) =>
         prevState.map((board) =>
@@ -159,10 +161,13 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
     }
   };
 
-
   // Verifica si es un número seleccionado según el tablero
   const handleIsSelectedNumber = (idBoard: number, number: number): boolean => {
-    return selectedNumbers.find((board) => board.idBoard === idBoard)?.numbers.includes(number) || false;
+    return (
+      selectedNumbers
+        .find((board) => board.idBoard === idBoard)
+        ?.numbers.includes(number) || false
+    );
   };
 
   // Verifica si el usuario ha completado un patrón ganador en alguno de sus tableros
@@ -173,7 +178,11 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
       // - `some(p => ...)`: Verifica si al menos un patrón `p` cumple la condición.
       // - `every(n => ...)`: Dentro de`some`, se usa `every` para asegurarse de que todos los números del patrón `p` están en las posiciones seleccionadas del tablero.
       // - `some(position => ...)`: Dentro de`every`, se usa `some` para confirmar si al menos una posición en el tablero coincide con un número del patrón.
-      if (patterns?.some((p) => p.every((n) => board.positions.some((position) => position === n)))) {
+      if (
+        patterns?.some((p) =>
+          p.every((n) => board.positions.some((position) => position === n))
+        )
+      ) {
         setWinner("player");
 
         // Limpia los números objetivos y desbloquea el siguiente nivel
@@ -193,11 +202,13 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
   };
 
   // Verifica si un tablero existe
-  const verifyExistBoard = (id: number): boolean => newBoards.some((b) => b.id === id);
+  const verifyExistBoard = (id: number): boolean =>
+    newBoards.some((b) => b.id === id);
 
   // Cambia el tablero actual
   const handleChangeBoard = (direction: Direction): void => {
-    const newBoardId = direction === "left" ? currentBoardId - 1 : currentBoardId + 1;
+    const newBoardId =
+      direction === "left" ? currentBoardId - 1 : currentBoardId + 1;
     if (verifyExistBoard(newBoardId)) {
       setcurrentBoardId(newBoardId);
     }
@@ -254,19 +265,22 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
               <div className="flex flex-row mx-auto border-4 border-gray-700 rounded-xl">
                 {
                   // Renderiza la cantidad de tableros definida en `currentLevel.boards`
-                  Array.from({ length: currentLevel.boards }).map((_, index) =>
-                    // Solo renderiza el tablero si coincide con el ID del tablero actual
-                    currentBoardId === index + 1 && (
-                      <BoardNumbers
-                        selectedNumbers={selectedNumbers}
-                        key={index}
-                        idBoard={index}
-                        // Pasa el tablero por su id
-                        board={board.find((b) => b.id === index + 1)?.board || []}
-                        handleIsSelectedNumber={handleIsSelectedNumber}
-                        handleClickButton={handleClickButton}
-                      />
-                    )
+                  Array.from({ length: currentLevel.boards }).map(
+                    (_, index) =>
+                      // Solo renderiza el tablero si coincide con el ID del tablero actual
+                      currentBoardId === index + 1 && (
+                        <BoardNumbers
+                          selectedNumbers={selectedNumbers}
+                          key={index}
+                          idBoard={index}
+                          // Pasa el tablero por su id
+                          board={
+                            board.find((b) => b.id === index + 1)?.board || []
+                          }
+                          handleIsSelectedNumber={handleIsSelectedNumber}
+                          handleClickButton={handleClickButton}
+                        />
+                      )
                   )
                 }
               </div>
@@ -275,7 +289,11 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
                 {/* Botones para cambiar entre tableros */}
                 <div className="flex flex-row justify-between gap-4">
                   <button
-                    className={`px-4 sm:py-3 py-2 font-semibold rounded-lg shadow-md w-full  shadow-black ${isAtFirstBoard ? "bg-gray-500 text-white cursor-not-allowed" : "bg-cyan-500 hover:bg-cyan-600 text-white"}`}
+                    className={`px-4 sm:py-3 py-2 font-semibold rounded-lg shadow-md w-full  shadow-black ${
+                      isAtFirstBoard
+                        ? "bg-gray-500 text-white cursor-not-allowed"
+                        : "bg-cyan-500 hover:bg-cyan-600 text-white"
+                    }`}
                     onClick={() => handleChangeBoard("left")}
                     disabled={isAtFirstBoard}
                   >
@@ -283,7 +301,11 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
                   </button>
 
                   <button
-                    className={`px-4 sm:py-3 py-2 font-semibold rounded-lg shadow-md w-full  sm:text-base text-sm shadow-black ${isAtLastBoard ? "bg-gray-500 text-white cursor-not-allowed" : "bg-cyan-500 hover:bg-cyan-600 text-white"}`}
+                    className={`px-4 sm:py-3 py-2 font-semibold rounded-lg shadow-md w-full  sm:text-base text-sm shadow-black ${
+                      isAtLastBoard
+                        ? "bg-gray-500 text-white cursor-not-allowed"
+                        : "bg-cyan-500 hover:bg-cyan-600 text-white"
+                    }`}
                     onClick={() => handleChangeBoard("right")}
                     disabled={isAtLastBoard}
                   >
@@ -293,12 +315,12 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
 
                 {/* Botones para comprobar el patrón ganador y salir del nivel */}
                 <div className="flex flex-row justify-center gap-4">
-                  <VictoryModal
+                  <WinnerPlayerModal
                     level={level}
                     handleCheckWinnerPattern={handleCheckWinnerPattern}
                     setWinner={setWinner}
                   />
-                  <LeaveModal />
+                  <ExitModal />
                 </div>
               </div>
             </div>
@@ -307,7 +329,11 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
 
         {
           // Contenedor dinámico para mostrar los tableros de los bots
-          <div className={`grid gap-3 mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-auto container ${viewPlayerBoard === false ? "grid" : "hidden"} sm:grid`}>
+          <div
+            className={`grid gap-3 mb-4 mt-2 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mx-auto container ${
+              viewPlayerBoard === false ? "grid" : "hidden"
+            } sm:grid`}
+          >
             {
               // Grupo de los bots
               currentLevel.bots.map((bot, index) => (
@@ -320,7 +346,9 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
                   patterns={patterns}
                   boards={bot.boards}
                   // Obtiene los tableros del siguiente bot en la lista, o 0 si no hay más
-                  nextBoards={bot.boards ? currentLevel.bots[index + 1]?.boards : 0}
+                  nextBoards={
+                    bot.boards ? currentLevel.bots[index + 1]?.boards : 0
+                  }
                   winner={winner}
                   setWinner={setWinner}
                   handleCleanTargets={handleCleanTargets}
@@ -333,10 +361,7 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
         {
           // Muestra la ventana modal si el bot ha ganado
           winner === "bot" && (
-            <DefeatModal
-              level={currentLevel.level}
-              setWinner={setWinner}
-            />
+            <WinnerBotModal level={currentLevel.level} setWinner={setWinner} />
           )
         }
       </div>

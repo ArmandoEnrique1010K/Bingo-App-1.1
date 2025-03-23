@@ -26,7 +26,6 @@ type BotsProps = {
 };
 
 export default function Bots({
-  // currentLevel,
   targets,
   interval,
   name,
@@ -37,8 +36,7 @@ export default function Bots({
   handleCleanTargets,
   nextBoards,
 }: BotsProps) {
-
-  // Tableros del bot
+  // Tableros generados para el bot
   const [botBoard, setBotBoard] = useState<BoardID>([]);
 
   // Posiciones marcadas por el bot
@@ -46,7 +44,9 @@ export default function Bots({
     useState<SelectedPositions>([]);
 
   // Números seleccionados por el bot
-  const [botSelectedNumbers, setBotSelectedNumbers] = useState<SelectedNumbers>([]);
+  const [botSelectedNumbers, setBotSelectedNumbers] = useState<SelectedNumbers>(
+    []
+  );
 
   // Identificadores de los temporizadores activos
   const [timeoutIds, setTimeoutIds] = useState<number[]>([]);
@@ -54,35 +54,35 @@ export default function Bots({
   // Números objetivo encontrados en los tableros del bot
   const [result, setResult] = useState<ResultNumberBoardsBot>([]);
 
-  // Genera los tableros del bot
-  // Se utiliza `useMemo` para evitar recalcular los tableros innecesariamente
+  // Genera los tableros del bot, solamente si no hay un ganador
   const newBoards = useMemo(() => {
-    if (winner === 'none') {
+    if (winner === "none") {
       return Array.from({ length: boards }).map((_, index) => ({
         // Se evita el valor 0 como ID
         id: index + 1,
         board: generateBoard(),
       }));
     } else {
-      return []
+      return [];
     }
   }, [winner]);
 
-  // Evaluar los números objetivo y marcarlos automáticamente
+  // Detecta y marca automáticamente los números objetivo encontrados en los tableros del bot
   useEffect(() => {
-    if (!botBoard.length || !targets.length || winner === 'bot') return; // Si no hay tableros, objetivos o el juego terminó, no ejecuta
+    // Si no hay tableros, objetivos o el juego terminó, detiene la ejecución
+    if (!botBoard.length || !targets.length || winner === "bot") return;
 
-    // Limpia los temporizadores previos antes de ejecutar nuevos
+    // Limpia temporizadores previos antes de ejecutar nuevos
     timeoutIds.forEach((id) => clearTimeout(id));
     setTimeoutIds([]);
 
     let currentDelay = 0;
     const newTimeoutIds: number[] = [];
 
-    // Se copia `result` para evitar modificar el estado directamente
+    // Copia de `result` para evitar modificar el estado directamente
     const dynamicResult = [...result];
 
-    // Mezcla el orden de los tableros y objetivos para hacer más dinámico el proceso
+    // Mezcla el orden de tableros y objetivos para mayor aleatoriedad
     dynamicResult.sort(() => Math.random() - 0.5);
 
     dynamicResult.forEach((res) => {
@@ -93,8 +93,8 @@ export default function Bots({
         const randomInterval = dynamicInterval() * interval;
         currentDelay = currentDelay + randomInterval;
 
+        // Marca el número en el tablero luego del tiempo establecido en el intervalo
         const timeoutId = setTimeout(() => {
-          // Marca el número en el tablero
           handleCheckNumber(res.idBoard, t.number, t.position);
         }, currentDelay);
 
@@ -109,7 +109,7 @@ export default function Bots({
     };
   }, [result]);
 
-  // Encuentra los números objetivos en los tableros
+  // Busca los números objetivo dentro de los tableros del bot
   useEffect(() => {
     if (targets.length > 0) {
       botBoard.forEach((board, index) => {
@@ -120,7 +120,8 @@ export default function Bots({
         setResult((prevResult) => [
           ...prevResult,
           {
-            idBoard: index + 1, // ID del tablero
+            // ID del tablero
+            idBoard: index + 1,
             targets: arrayTargets,
           },
         ]);
@@ -138,7 +139,7 @@ export default function Bots({
     );
   };
 
-  // Marca un número automáticamente en el tablero
+  // Marca un número en el tablero del bot
   const handleCheckNumber = (
     idBoard: number,
     number: number,
@@ -148,11 +149,11 @@ export default function Bots({
       prevState.map((board) =>
         board.idBoard === idBoard
           ? {
-            ...board,
-            numbers: handleVerifyNumber(idBoard, number)
-              ? [...board.numbers, number]
-              : board.numbers,
-          }
+              ...board,
+              numbers: handleVerifyNumber(idBoard, number)
+                ? [...board.numbers, number]
+                : board.numbers,
+            }
           : board
       )
     );
@@ -161,26 +162,26 @@ export default function Bots({
       prevState.map((board) =>
         board.idBoard === idBoard
           ? {
-            ...board,
-            positions: handleVerifyNumber(idBoard, number)
-              ? [...board.positions, position]
-              : board.positions,
-          }
+              ...board,
+              positions: handleVerifyNumber(idBoard, number)
+                ? [...board.positions, position]
+                : board.positions,
+            }
           : board
       )
     );
   };
 
-  // Evalúa si el bot ha ganado
-  const handleSelectedPosition = (idBoard: number, position: number) => {
-    if (botSelectedPositions.some((pos) => pos.idBoard === idBoard && pos.positions.some((p) => p === position))) {
-      // Retorna true
-      return true;
-    }
-    return false;
+  // Verifica si es un número seleccionado según el tablero
+  const handleIsSelectedNumber = (idBoard: number, number: number): boolean => {
+    return (
+      botSelectedNumbers
+        .find((board) => board.idBoard === idBoard)
+        ?.numbers.includes(number) || false
+    );
   };
 
-  // Verifica si un patrón ganador está presente en los tableros del bot
+  // Verifica si el bot ha ganado
   const handleCheckWinnerPatternBot = () => {
     // Si ya hay un ganador, no evalúa
     if (winner !== "none") return;
@@ -194,12 +195,12 @@ export default function Bots({
       if (hasWinningPattern) {
         const timeoutId = setTimeout(() => {
           setWinner((prevWinner) => {
-            if (prevWinner === 'none') {
-              handleCleanTargets()
-              return 'bot'
+            if (prevWinner === "none") {
+              handleCleanTargets();
+              return "bot";
             }
-            return prevWinner
-          })
+            return prevWinner;
+          });
         }, 5000);
 
         // Limpia los temporizadores
@@ -213,26 +214,9 @@ export default function Bots({
     handleCheckWinnerPatternBot();
   }, [botSelectedNumbers]);
 
-  // // Reinicia el bot si el jugador gana
-  // useEffect(() => {
-  //   setBotBoard(newBoards);
-  //   setBotSelectedPositions(
-  //     Array.from({ length: boards }).map((_, index) => ({
-  //       idBoard: index + 1,
-  //       positions: [13], // Inicializa con una posición genérica
-  //     }))
-  //   );
-  //   setBotSelectedNumbers(
-  //     Array.from({ length: boards }).map((_, index) => ({
-  //       idBoard: index + 1,
-  //       numbers: [0], // Inicializa con un número genérico
-  //     }))
-  //   );
-  // }, [currentLevel.level]);
-
   // Reinicia el bot si no hay un ganador (al reiniciar el nivel o pasar de nivel)
   useEffect(() => {
-    if (winner === 'none') {
+    if (winner === "none") {
       setBotBoard(newBoards);
       setBotSelectedPositions(
         Array.from({ length: boards }).map((_, index) => ({
@@ -250,17 +234,21 @@ export default function Bots({
   }, [winner]);
 
   return (
-    <div className={`flex flex-col items-center bg-gray-700  p-2 rounded-lg shadow-md  ${boards >= 2 ? "col-span-2" : ""} ${boards < 2 && (nextBoards !== 0 || nextBoards >= 2) ? "col-span-2" : ""}`}
+    <div
+      className={`flex flex-col items-center bg-gray-700 p-2 rounded-lg shadow-md  ${
+        boards >= 2 ? "col-span-2" : ""
+      } ${
+        boards < 2 && (nextBoards !== 0 || nextBoards >= 2) ? "col-span-2" : ""
+      }`}
     >
       <h2 className="text-lg font-semibold text-gray-200 mb-2">{name}</h2>
-
       <div className="flex flex-row gap-4">
         {Array.from({ length: boards }).map((_, index) => (
           <BotBoardNumbers
             key={index + 1}
             board={botBoard.find((b) => b.id === index + 1)?.board || []}
             idBoard={index + 1}
-            handleSelectedPosition={handleSelectedPosition}
+            handleIsSelectedNumber={handleIsSelectedNumber}
           />
         ))}
       </div>

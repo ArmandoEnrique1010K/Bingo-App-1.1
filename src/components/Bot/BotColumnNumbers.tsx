@@ -3,7 +3,7 @@ import BotSquareNumber from "./BotSquareNumber";
 
 type BotRowNumbersProps = {
   board: Board;
-  handleSelectedPosition: (idBoard: number, position: number) => boolean;
+  handleIsSelectedNumber: (idBoard: number, number: number) => boolean;
   max: number;
   min: number;
   idBoard: number;
@@ -11,7 +11,7 @@ type BotRowNumbersProps = {
 
 export default function BotColumnNumbers({
   board,
-  handleSelectedPosition,
+  handleIsSelectedNumber,
   max,
   min,
   idBoard,
@@ -20,14 +20,14 @@ export default function BotColumnNumbers({
     <>
       <div className="flex flex-col">
         {
-          // Itera sobre board seleccionando unos 5 numeros con filter para asignarlos a BotSquareNumber
+          // Itera sobre board seleccionando unos 5 numeros
           board
             .filter((n) => n.position >= min && n.position <= max)
             .map((n) => (
               <BotSquareNumber
                 key={n.position}
                 idBoard={idBoard}
-                handleSelectedPosition={handleSelectedPosition}
+                handleIsSelectedNumber={handleIsSelectedNumber}
                 value={{ number: n.number, position: n.position }}
               />
             ))
