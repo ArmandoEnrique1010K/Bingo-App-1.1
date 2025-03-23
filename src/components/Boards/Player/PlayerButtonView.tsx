@@ -1,13 +1,13 @@
 import { useMemo } from "react";
-import { SelectedNumbers } from "../../types";
+import { SelectedNumbers } from "../../../types";
 
 type ButtonNumberProps = {
-  handleClickButton: (
+  handleNumberSelection: (
     idBoard: number,
     number: number,
     position: number
   ) => void;
-  handleIsSelectedNumber: (idBoard: number, position: number) => boolean;
+  isNumberSelected: (idBoard: number, position: number) => boolean;
   value: {
     number: number;
     position: number;
@@ -17,15 +17,15 @@ type ButtonNumberProps = {
 };
 
 export default function ButtonNumber({
-  handleClickButton,
-  handleIsSelectedNumber,
+  handleNumberSelection,
+  isNumberSelected,
   value,
   idBoard,
   selectedNumbers,
 }: ButtonNumberProps) {
   // Memoriza la selección del número para evitar re-cálculos innecesarios
   const numberSelected = useMemo(() => {
-    return handleIsSelectedNumber(idBoard, value.number);
+    return isNumberSelected(idBoard, value.number);
   }, [selectedNumbers]);
 
   return (
@@ -34,7 +34,9 @@ export default function ButtonNumber({
         numberSelected === true ? "bg-cyan-500" : "bg-gray-500"
       }`}
       // Al hacer clic, se marca el número en el tablero
-      onClick={() => handleClickButton(idBoard, value.number, value.position)}
+      onClick={() =>
+        handleNumberSelection(idBoard, value.number, value.position)
+      }
     >
       {/* Si el número está en la posición central (posición 13), se muestra 'Free' */}
       {value.position === 13 ? "Free" : value.number}

@@ -2,7 +2,7 @@ import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
-export default function Help() {
+export default function HelpModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   function open() {

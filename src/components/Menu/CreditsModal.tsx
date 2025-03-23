@@ -2,7 +2,7 @@ import { useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
-export default function Credits() {
+export default function CreditsModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   function open() {

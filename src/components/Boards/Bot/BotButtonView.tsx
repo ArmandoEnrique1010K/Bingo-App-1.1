@@ -1,4 +1,4 @@
-type BotSquareNumberProps = {
+type BotButtonViewProps = {
   handleIsSelectedNumber: (idBoard: number, number: number) => boolean;
   value: {
     number: number;
@@ -7,11 +7,11 @@ type BotSquareNumberProps = {
   idBoard: number;
 };
 
-export default function BotSquareNumber({
+export default function BotButtonView({
   handleIsSelectedNumber,
   value,
   idBoard,
-}: BotSquareNumberProps) {
+}: BotButtonViewProps) {
   return (
     <>
       <div

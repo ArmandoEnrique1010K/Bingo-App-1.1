@@ -1,26 +1,26 @@
-import { Board } from "../../types";
-import ColumnNumbers from "./ColumnNumbers";
-import { SelectedNumbers } from '../../types/index';
+import { Board } from "../../../types";
+import ColumnNumbers from "./PlayerColumnView";
+import { SelectedNumbers } from "../../../types/index";
 
-type BoardNumbersProps = {
+type BoardViewProps = {
   board: Board;
-  handleClickButton: (
+  handleNumberSelection: (
     idBoard: number,
     number: number,
     position: number
   ) => void;
-  handleIsSelectedNumber: (idBoard: number, position: number) => boolean;
+  isNumberSelected: (idBoard: number, position: number) => boolean;
   idBoard: number;
-  selectedNumbers: SelectedNumbers
+  selectedNumbers: SelectedNumbers;
 };
 
-export default function BoardNumbers({
+export default function BoardView({
   board,
-  handleClickButton,
-  handleIsSelectedNumber,
+  handleNumberSelection,
+  isNumberSelected,
   idBoard,
   selectedNumbers,
-}: BoardNumbersProps) {
+}: BoardViewProps) {
   return (
     <div className="flex flex-row gap-2 sm:p-4 p-2 bg-gray-700 justify-center items-center">
       {/* Conviene usar un arreglo para generar dinamicamente las columnas del tablero */}
@@ -28,8 +28,8 @@ export default function BoardNumbers({
         <ColumnNumbers
           key={index}
           numberBoard={board}
-          handleClickButton={handleClickButton}
-          handleIsSelectedNumber={handleIsSelectedNumber}
+          handleNumberSelection={handleNumberSelection}
+          isNumberSelected={isNumberSelected}
           idBoard={idBoard}
           min={index * 5 + 1}
           max={(index + 1) * 5}
