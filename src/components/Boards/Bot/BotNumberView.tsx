@@ -24,7 +24,7 @@ export default function BotNumberView({
                     }`}
       >
         {/* El bot no muestra los numeros de su tablero */}
-        {value.number === 0 ? "F" : /* value.number */ ""}
+        {value.number === 0 ? "F" : value.number /*""*/}
       </div>
     </>
   );

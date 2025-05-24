@@ -1,14 +1,51 @@
 import { useEffect, useMemo, useState } from "react";
 import { levels } from "../data/levels";
-import { BoardID, Pattern, SelectedNumbers, SelectedPositions, Winner } from "../types";
+import { BoardID, Level, Pattern, SelectedNumbers, SelectedPositions, Winner } from "../types";
 import { generateBoard } from "../utils/generateBoard";
 import { generateTargets } from "../utils/generateTargets";
+import { useLocation, useNavigate } from "react-router";
 
-export const useLevel = ({ level }: { level: number }) => {
+export const useLevel = (
+    // { level }: { level: number }
+) => {
+
+    // Obtiene los niveles desbloqueados desde localStorage o lo inicializa con el nivel 1
+    const initialLevels = (): number[] => {
+        const localStorageLevels = localStorage.getItem('unlockedLevels')
+        return localStorageLevels ? JSON.parse(localStorageLevels) : [1]
+    }
+
+    const [unlockedLevels, setUnlockedLevels] = useState<number[]>(initialLevels)
+
+    // Establece en el localStorage los niveles desbloqueados
+    useEffect(() => {
+        localStorage.setItem('unlockedLevels', JSON.stringify(unlockedLevels))
+    }, [unlockedLevels])
+
+    // Desbloquea un nivel si no se encuentra desbloqueado
+    const unlockLevel = (level: number) => {
+        if (!unlockedLevels.includes(level)) {
+            setUnlockedLevels([...unlockedLevels, level])
+        }
+    }
 
     // Obtiene los datos del nivel actual
     // El operador de TypeScript "!" (non-null assertion) indica que nunca será nulo.
-    const currentLevel = levels.find((l) => l.level === level)!;
+
+    // El nivel actual se obtiene de la URL
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Si la ruta actual es de la forma "/level_1", "level_2". Obtiene solamente el número
+    const pathLevel = parseInt(location.pathname.split("_")[1], 10);
+    // console.log(location.pathname)
+
+
+    const [currentLevel, setCurrentLevel] = useState<Level>();
+
+
+
+    // SI EL JUGADOR HA GANADO Y HA HECHO CLIC EN EL BOTÓN DE LA VENTANA MODAL, DEBE AVANZAR DE NIVEL
 
     // Tableros del jugador
     const [board, setBoard] = useState<BoardID>([]);
@@ -34,10 +71,10 @@ export const useLevel = ({ level }: { level: number }) => {
     const [selectedNumbers, setSelectedNumbers] = useState<SelectedNumbers>([]);
 
     // Ganador
-    const [winner, setWinner] = useState<Winner>("none");
-
     // Ronda
     const [round, setRound] = useState(0);
+
+    const [winner, setWinner] = useState<Winner>("none");
 
     // Números excluidos (ya que se mostraron en los números objetivos)
     const [excludedTargets, setExcludedTargets] = useState<number[]>([]);
@@ -45,13 +82,16 @@ export const useLevel = ({ level }: { level: number }) => {
     // Vista en diseño responsive
     const [viewPlayerBoard, setViewPlayerBoard] = useState(true);
 
-    // Establece los patrones ganadores y el id de los tableros del nivel actual
-    useEffect(() => {
-        setPatterns(currentLevel.patterns);
-        setBoardsId(newBoards.map((n) => n.id));
-        setcurrentBoardId(newBoards.length > 0 ? newBoards[0].id : 0);
-    }, [currentLevel]);
 
+    useEffect(() => {
+        if (winner === 'none') {
+            const level = levels.find((l) => l.level === pathLevel)!;
+            setCurrentLevel(level)
+        }
+    }, [winner, pathLevel])
+
+
+    // TODO: CUANDO PASO DEL NIVEL 5 A 6, SE MUESTRA 1 SOLO TABLERO PARA EL JUGADOR, A PESAR DE QUE ESE NIVEL VA A SER CON 2 TABLEROS
     // Usar useMemo de esta manera asegura que newBoards se recalcule solo cuando currentLevel.level o winner cambie, lo cual es una buena práctica para evitar renders innecesarios y mejorar el rendimiento.
     const newBoards = useMemo(() => {
         if (winner === "none") {
@@ -62,7 +102,14 @@ export const useLevel = ({ level }: { level: number }) => {
         } else {
             return [];
         }
-    }, [currentLevel.level, winner]);
+    }, [/*currentLevel.level,*/ winner, currentLevel.boards]);
+
+    // Establece los patrones ganadores y el id de los tableros del nivel actual
+    useEffect(() => {
+        setPatterns(currentLevel.patterns);
+        setBoardsId(newBoards.map((n) => n.id));
+        setcurrentBoardId(newBoards.length > 0 ? newBoards[0].id : 0);
+    }, [currentLevel, newBoards]);
 
     // Establece los valores iniciales...
     const resetLevel = (): void => {
@@ -120,6 +167,9 @@ export const useLevel = ({ level }: { level: number }) => {
     };
 
     return {
+        unlockedLevels,
+        unlockLevel,
+
         currentLevel,
         board,
         boardsId,

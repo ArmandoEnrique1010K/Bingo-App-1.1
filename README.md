@@ -1,8 +1,11 @@
 # Bingo-App-1.1 🥈
 
+![](https://skillicons.dev/icons?i=html) ![a](https://skillicons.dev/icons?i=tailwind)![a](https://skillicons.dev/icons?i=ts)![a](https://skillicons.dev/icons?i=netlify)
+
 Demo de videojuego de Bingo con Bots simulados con React.
 
 Tecnologias utilizadas: HTML, TailwindCSS, TypeScript, React
+
 Librerias utilizadas: HeroIcons, HeadlessUI y ToneJS
 
 Historial de versiones:
@@ -33,7 +36,6 @@ Versión de prueba: [Haga clic aqui para jugar](https://stately-hummingbird-3bc0
 ## Captura de pantalla
 
 ![](assets/2025-01-19-16-19-52-image.png)
-
 
 ## ENLACES:
 

@@ -5,12 +5,13 @@ import WinnerBotModal from "../components/Winner/WinnerBotModal";
 import PlayerView from "../components/Boards/Player/PlayerView";
 import { useLevel } from "../hooks/useLevel";
 
-type LevelPageProps = {
-  level: number;
-  unlockLevel: (number: number) => void;
-};
+// type LevelPageProps = {
+//   level: number;
+//   unlockLevel: (number: number) => void;
+// };
 
-export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
+export default function LevelPage() {
+// { level, unlockLevel }: LevelPageProps
   const {
     currentLevel,
     board,
@@ -32,7 +33,9 @@ export default function LevelPage({ level, unlockLevel }: LevelPageProps) {
     setSelectedPositions,
     setSelectedNumbers,
     setcurrentBoardId,
-  } = useLevel({ level });
+  } =
+    useLevel();
+    // { level }
 
   return (
     <>
